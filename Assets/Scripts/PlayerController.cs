@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -20,9 +21,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _moveInput = Input.GetAxisRaw("Horizontal");
+        _moveInput = ReadHorizontalInput();
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (IsJumpTriggered() && IsGrounded())
         {
             _jumpRequested = true;
         }
@@ -50,5 +51,53 @@ public class PlayerController : MonoBehaviour
         }
 
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+    }
+
+    private float ReadHorizontalInput()
+    {
+        float keyboardInput = 0f;
+
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed)
+            {
+                keyboardInput -= 1f;
+            }
+
+            if (Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
+            {
+                keyboardInput += 1f;
+            }
+        }
+
+        float gamepadInput = 0f;
+
+        if (Gamepad.current != null)
+        {
+            gamepadInput = Gamepad.current.leftStick.ReadValue().x;
+        }
+
+        float input = Mathf.Abs(gamepadInput) > Mathf.Abs(keyboardInput) ? gamepadInput : keyboardInput;
+
+        return Mathf.Clamp(input, -1f, 1f);
+    }
+
+    private bool IsJumpTriggered()
+    {
+        bool jump = false;
+
+        if (Keyboard.current != null)
+        {
+            jump |= Keyboard.current.spaceKey.wasPressedThisFrame ||
+                    Keyboard.current.wKey.wasPressedThisFrame ||
+                    Keyboard.current.upArrowKey.wasPressedThisFrame;
+        }
+
+        if (Gamepad.current != null)
+        {
+            jump |= Gamepad.current.buttonSouth.wasPressedThisFrame;
+        }
+
+        return jump;
     }
 }
