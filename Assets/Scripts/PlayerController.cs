@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,14 +10,37 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
+    [Header("Kick Settings")]
+    [SerializeField] private Transform bootTransform;
+    [SerializeField] private float kickForwardAngle = -75f;
+    [SerializeField] private float kickOutDuration = 0.08f;
+    [SerializeField] private float kickReturnDuration = 0.15f;
+    [SerializeField] private float kickCooldown = 0.3f;
 
     private Rigidbody2D _rigidbody;
     private float _moveInput;
     private bool _jumpRequested;
+    private bool _kickRequested;
+    private bool _isKicking;
+    private float _nextKickAllowedTime;
+    private Quaternion _bootDefaultLocalRotation;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+
+        if (bootTransform != null)
+        {
+            _bootDefaultLocalRotation = bootTransform.localRotation;
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (bootTransform != null)
+        {
+            _bootDefaultLocalRotation = bootTransform.localRotation;
+        }
     }
 
     private void Update()
@@ -26,6 +50,17 @@ public class PlayerController : MonoBehaviour
         if (IsJumpTriggered() && IsGrounded())
         {
             _jumpRequested = true;
+        }
+
+        if (IsKickTriggered())
+        {
+            QueueKick();
+        }
+
+        if (_kickRequested && !_isKicking)
+        {
+            _kickRequested = false;
+            StartCoroutine(KickRoutine());
         }
     }
 
@@ -99,5 +134,72 @@ public class PlayerController : MonoBehaviour
         }
 
         return jump;
+    }
+
+    private bool IsKickTriggered()
+    {
+        bool kick = false;
+
+        if (Keyboard.current != null)
+        {
+            kick |= Keyboard.current.kKey.wasPressedThisFrame ||
+                    Keyboard.current.rightCtrlKey.wasPressedThisFrame ||
+                    Keyboard.current.rightAltKey.wasPressedThisFrame;
+        }
+
+        if (Gamepad.current != null)
+        {
+            kick |= Gamepad.current.buttonEast.wasPressedThisFrame ||
+                    Gamepad.current.rightTrigger.wasPressedThisFrame;
+        }
+
+        return kick;
+    }
+
+    private void QueueKick()
+    {
+        if (bootTransform == null)
+        {
+            return;
+        }
+
+        if (_isKicking || Time.time < _nextKickAllowedTime)
+        {
+            return;
+        }
+
+        _kickRequested = true;
+    }
+
+    private IEnumerator KickRoutine()
+    {
+        _isKicking = true;
+
+        Quaternion startRotation = _bootDefaultLocalRotation;
+        Quaternion forwardRotation = startRotation * Quaternion.Euler(0f, 0f, kickForwardAngle);
+
+        float elapsed = 0f;
+
+        while (elapsed < kickOutDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = kickOutDuration > 0f ? Mathf.Clamp01(elapsed / kickOutDuration) : 1f;
+            bootTransform.localRotation = Quaternion.Lerp(startRotation, forwardRotation, t);
+            yield return null;
+        }
+
+        elapsed = 0f;
+
+        while (elapsed < kickReturnDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = kickReturnDuration > 0f ? Mathf.Clamp01(elapsed / kickReturnDuration) : 1f;
+            bootTransform.localRotation = Quaternion.Lerp(forwardRotation, startRotation, t);
+            yield return null;
+        }
+
+        bootTransform.localRotation = startRotation;
+        _nextKickAllowedTime = Time.time + kickCooldown;
+        _isKicking = false;
     }
 }
