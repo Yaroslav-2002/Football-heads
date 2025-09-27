@@ -31,14 +31,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector2 velocity = _rigidbody.velocity;
+        Vector2 velocity = _rigidbody.linearVelocity;
         velocity.x = _moveInput * moveSpeed;
-        _rigidbody.velocity = velocity;
+        _rigidbody.linearVelocity = velocity;
 
         if (_jumpRequested)
         {
             _jumpRequested = false;
-            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0f);
+            _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, 0f);
             _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }

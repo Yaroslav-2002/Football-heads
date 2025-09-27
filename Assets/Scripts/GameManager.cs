@@ -6,12 +6,16 @@ public class GameManager : MonoBehaviour
 
     [Header("Player Spawning")]
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private Transform ballSpawnPoint;
     [SerializeField] private Transform playerSpawnPoint;
 
     private GameObject _playerInstance;
+    private GameObject _ballInstance;
 
     public static GameManager Instance => _instance;
     public GameObject PlayerInstance => _playerInstance;
+    public GameObject BallInstance => _ballInstance;
 
     private void Awake()
     {
@@ -32,25 +36,31 @@ public class GameManager : MonoBehaviour
 
     public void InitializeGame()
     {
-        SpawnPlayer();
+        _playerInstance = InitializeEntity(playerPrefab, _playerInstance, playerSpawnPoint, "Player");
+        _ballInstance = InitializeEntity(ballPrefab, _ballInstance, ballSpawnPoint, "Ball");
     }
 
-    private void SpawnPlayer()
+    private GameObject InitializeEntity(GameObject prefab, GameObject currentInstance, Transform spawnPoint, string name)
     {
-        if (playerPrefab == null)
+        if (prefab == null)
         {
-            Debug.LogError("GameManager: Player prefab is not assigned.");
-            return;
+            Debug.LogError($"GameManager: {name} prefab is not assigned.");
+            return currentInstance;
         }
 
-        if (_playerInstance != null)
+        if (currentInstance != null)
         {
-            Destroy(_playerInstance);
+            Destroy(currentInstance);
         }
 
-        Vector3 spawnPosition = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.zero;
-        Quaternion spawnRotation = playerSpawnPoint != null ? playerSpawnPoint.rotation : Quaternion.identity;
+        return SpawnEntity(prefab, spawnPoint);
+    }
 
-        _playerInstance = Instantiate(playerPrefab, spawnPosition, spawnRotation);
+    private GameObject SpawnEntity(GameObject prefab, Transform spawnPoint)
+    {
+        Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : Vector3.zero;
+        Quaternion spawnRotation = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
+
+        return Instantiate(prefab, spawnPosition, spawnRotation);
     }
 }
