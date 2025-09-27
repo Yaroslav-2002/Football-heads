@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 
 public class BootSwing : MonoBehaviour
 {
-    [Header("Swing Targets")]
-    public Transform restPosition;
+    [Header("Swing Target")]
     public Transform kickPosition;
 
     [Header("Timing")]
@@ -45,16 +44,9 @@ public class BootSwing : MonoBehaviour
     {
         _parent = transform.parent;
 
-        if (restPosition != null)
-        {
-            _restLocalPosition = WorldToLocal(restPosition.position);
-            _restLocalRotation = WorldToLocal(restPosition.rotation);
-        }
-        else
-        {
-            _restLocalPosition = transform.localPosition;
-            _restLocalRotation = transform.localRotation;
-        }
+        _restLocalPosition = WorldToLocal(gameObject.transform.position);
+        _restLocalRotation = WorldToLocal(gameObject.transform.rotation);
+
 
         if (kickPosition != null)
         {
@@ -108,7 +100,7 @@ public class BootSwing : MonoBehaviour
 
     private IEnumerator SwingRoutine()
     {
-        if (restPosition == null || kickPosition == null)
+        if (kickPosition == null)
         {
             yield break;
         }

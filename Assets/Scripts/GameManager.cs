@@ -8,9 +8,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform ballSpawnPoint;
-    [SerializeField] private Transform playerSpawnPoint;
+    [SerializeField] private Transform playerRightSpawnPoint;
+    [SerializeField] private Transform playerLeftSpawnPoint;
 
     private GameObject _playerInstance;
+    private GameObject _secondPlayerInstance;
     private GameObject _ballInstance;
 
     public static GameManager Instance => _instance;
@@ -36,7 +38,8 @@ public class GameManager : MonoBehaviour
 
     public void InitializeGame()
     {
-        _playerInstance = InitializeEntity(playerPrefab, _playerInstance, playerSpawnPoint, "Player");
+        _playerInstance = InitializeEntity(playerPrefab, _playerInstance, playerRightSpawnPoint, "Player");
+        _secondPlayerInstance = InitializeEntity(playerPrefab, _secondPlayerInstance, playerLeftSpawnPoint, "Player");
         _ballInstance = InitializeEntity(ballPrefab, _ballInstance, ballSpawnPoint, "Ball");
     }
 
