@@ -27,6 +27,7 @@ public class BootSwing : MonoBehaviour
     private Vector3 _kickLocalPosition;
     private Quaternion _kickLocalRotation;
     private Transform _parent;
+    private bool _waitingForKickRelease;
 
     private void Awake()
     {
@@ -62,6 +63,8 @@ public class BootSwing : MonoBehaviour
 
     private void Update()
     {
+        UpdateKickReleaseState();
+
         if (_isSwinging)
         {
             return;
@@ -79,6 +82,29 @@ public class BootSwing : MonoBehaviour
     }
 
     private bool IsKickTriggered()
+    {
+        if (_waitingForKickRelease)
+        {
+            return false;
+        }
+
+        return WasKickPressedThisFrame();
+    }
+
+    private void UpdateKickReleaseState()
+    {
+        if (!_waitingForKickRelease)
+        {
+            return;
+        }
+
+        if (WasKickReleasedThisFrame() || !IsKickPressed())
+        {
+            _waitingForKickRelease = false;
+        }
+    }
+
+    private bool WasKickPressedThisFrame()
     {
         bool kickPressed = false;
 
@@ -98,6 +124,46 @@ public class BootSwing : MonoBehaviour
         return kickPressed;
     }
 
+    private bool WasKickReleasedThisFrame()
+    {
+        bool kickReleased = false;
+
+        if (Keyboard.current != null)
+        {
+            kickReleased |= Keyboard.current.spaceKey.wasReleasedThisFrame ||
+                            Keyboard.current.kKey.wasReleasedThisFrame ||
+                            Keyboard.current.rightCtrlKey.wasReleasedThisFrame;
+        }
+
+        if (Gamepad.current != null)
+        {
+            kickReleased |= Gamepad.current.buttonEast.wasReleasedThisFrame ||
+                            Gamepad.current.rightTrigger.wasReleasedThisFrame;
+        }
+
+        return kickReleased;
+    }
+
+    private bool IsKickPressed()
+    {
+        bool kickPressed = false;
+
+        if (Keyboard.current != null)
+        {
+            kickPressed |= Keyboard.current.spaceKey.isPressed ||
+                           Keyboard.current.kKey.isPressed ||
+                           Keyboard.current.rightCtrlKey.isPressed;
+        }
+
+        if (Gamepad.current != null)
+        {
+            kickPressed |= Gamepad.current.buttonEast.isPressed ||
+                           Gamepad.current.rightTrigger.IsPressed();
+        }
+
+        return kickPressed;
+    }
+
     private IEnumerator SwingRoutine()
     {
         if (kickPosition == null)
@@ -107,6 +173,7 @@ public class BootSwing : MonoBehaviour
 
         CacheParentSpace();
         _isSwinging = true;
+        _waitingForKickRelease = true;
         float duration = Mathf.Max(0.0001f, swingDuration);
         float halfDuration = duration * 0.5f;
 
