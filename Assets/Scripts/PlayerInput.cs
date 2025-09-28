@@ -1,63 +1,81 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [DisallowMultipleComponent]
 public class PlayerInput : MonoBehaviour
 {
-    public float MoveInput { get; private set; }
-    public Action OnJumpTriggered;
-
     private IControllable _controllable;
     private InputActions _inputActions;
-
-
-    private bool _waitingForKickRelease;
+    private InputActions.PlayerActions _playerActions;
 
     private void Awake()
     {
-        _inputActions = new InputActions();
-        _inputActions.Enable();
-
         _controllable = GetComponent<IControllable>();
-
-        if(_controllable == null)
+        if (_controllable == null)
         {
-            Debug.Log($"There's no IControllable component on the object: {gameObject.name}");
+            Debug.LogError($"PlayerInput: No IControllable implementation found on {name}.", this);
+            enabled = false;
+            return;
         }
-    }
 
-    private void Update()
-    {
-        ReadMovement();
-    }
-
-    private void ReadMovement()
-    {
-        float direction = _inputActions.Player.Move.ReadValue<Vector2>().x;
-
-        _controllable.Move(direction);
+        _inputActions = new InputActions();
+        _playerActions = _inputActions.Player;
     }
 
     private void OnEnable()
     {
-        _inputActions.Player.Jump.performed += OnJumpActionTriggered;
-        _inputActions.Player.Kick.started += OnKickStarted;
-    }
+        if (_inputActions == null)
+        {
+            return;
+        }
 
-    private void OnKickStarted(InputAction.CallbackContext context)
-    {
-        throw new NotImplementedException();
+        _playerActions.Enable();
+        _playerActions.Jump.performed += OnJumpPerformed;
+        _playerActions.Kick.started += OnKickStarted;
+        _playerActions.Kick.canceled += OnKickCanceled;
     }
 
     private void OnDisable()
     {
-        _inputActions.Player.Jump.performed -= OnJumpActionTriggered;
+        if (_inputActions == null)
+        {
+            return;
+        }
+
+        _playerActions.Jump.performed -= OnJumpPerformed;
+        _playerActions.Kick.started -= OnKickStarted;
+        _playerActions.Kick.canceled -= OnKickCanceled;
+        _playerActions.Disable();
     }
 
-    private void OnJumpActionTriggered(InputAction.CallbackContext context)
+    private void OnDestroy()
+    {
+        _inputActions?.Dispose();
+    }
+
+    private void Update()
+    {
+        if (_controllable == null || _inputActions == null)
+        {
+            return;
+        }
+
+        Vector2 moveInput = _playerActions.Move.ReadValue<Vector2>();
+        _controllable.Move(moveInput.x);
+    }
+
+    private void OnJumpPerformed(InputAction.CallbackContext context)
     {
         _controllable.Jump();
     }
 
+    private void OnKickStarted(InputAction.CallbackContext context)
+    {
+        _controllable.StartKick();
+    }
+
+    private void OnKickCanceled(InputAction.CallbackContext context)
+    {
+        _controllable.ReleaseKick();
+    }
 }

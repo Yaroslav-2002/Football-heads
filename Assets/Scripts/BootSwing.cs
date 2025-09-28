@@ -1,32 +1,35 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 public class BootSwing : MonoBehaviour
 {
     [Header("Swing Target")]
-    public Transform kickPosition;
+    [SerializeField] private Transform kickPosition;
 
     [Header("Timing")]
     [Min(0f)]
-    public float swingDuration = 0.35f;
+    [SerializeField] private float swingDuration = 0.35f;
     [Min(0f)]
-    public float kickCooldown = 0.25f;
+    [SerializeField] private float kickCooldown = 0.25f;
 
     [Header("Events")]
-    public UnityEvent onKickPeak;
+    [SerializeField] private UnityEvent onKickPeak;
 
     public event Action KickPeakReached;
 
-    private bool _isSwinging;
+    public float LastKickCharge { get; private set; }
+
     private float _nextKickAllowedTime;
     private Vector3 _restLocalPosition;
     private Quaternion _restLocalRotation;
     private Vector3 _kickLocalPosition;
     private Quaternion _kickLocalRotation;
     private Transform _parent;
+    private float _kickProgress;
+    private bool _kickHeld;
+    private bool _peakInvokedForCurrentPress;
+    private float _pressStartTime;
 
     private void Awake()
     {
@@ -40,13 +43,37 @@ public class BootSwing : MonoBehaviour
         MoveToRestInstant();
     }
 
+    private void Update()
+    {
+        if (kickPosition == null)
+        {
+            return;
+        }
+
+        if (_kickHeld)
+        {
+            float elapsed = Time.time - _pressStartTime;
+            float progress = CalculateChargeNormalized(elapsed);
+            SetKickProgress(progress);
+        }
+        else if (!Mathf.Approximately(_kickProgress, 0f))
+        {
+            float progress = Mathf.MoveTowards(_kickProgress, 0f, GetProgressStep());
+            SetKickProgress(progress);
+
+            if (Mathf.Approximately(_kickProgress, 0f))
+            {
+                _peakInvokedForCurrentPress = false;
+            }
+        }
+    }
+
     private void CacheParentSpace()
     {
         _parent = transform.parent;
 
-        _restLocalPosition = WorldToLocal(gameObject.transform.position);
-        _restLocalRotation = WorldToLocal(gameObject.transform.rotation);
-
+        _restLocalPosition = WorldToLocal(transform.position);
+        _restLocalRotation = WorldToLocal(transform.rotation);
 
         if (kickPosition != null)
         {
@@ -60,9 +87,9 @@ public class BootSwing : MonoBehaviour
         }
     }
 
-    public void Kick()
+    public void BeginKickPress()
     {
-        if (_isSwinging)
+        if (kickPosition == null)
         {
             return;
         }
@@ -72,58 +99,40 @@ public class BootSwing : MonoBehaviour
             return;
         }
 
-        StartCoroutine(SwingRoutine());
-    }
-    
-  
-
-    private IEnumerator SwingRoutine()
-    {
-        if (kickPosition == null)
+        if (_kickHeld)
         {
-            yield break;
+            return;
         }
 
         CacheParentSpace();
-        _isSwinging = true;
-        //_waitingForKickRelease = true;
+
         float duration = Mathf.Max(0.0001f, swingDuration);
-        float halfDuration = duration * 0.5f;
+        _pressStartTime = Time.time - _kickProgress * duration;
+        _kickHeld = true;
+        _peakInvokedForCurrentPress = _kickProgress >= 0.999f;
+    }
 
-        float elapsed = 0f;
-        while (elapsed < halfDuration)
+    public void EndKickPress()
+    {
+        if (!_kickHeld && Mathf.Approximately(_kickProgress, 0f))
         {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / halfDuration);
-            float eased = EaseOutSine(t);
-            ApplySwing(ArcLerp(_restLocalPosition, _kickLocalPosition, eased),
-                       Quaternion.Slerp(_restLocalRotation, _kickLocalRotation, eased));
-            yield return null;
+            return;
         }
 
-        ApplySwing(_kickLocalPosition, _kickLocalRotation);
-        KickPeakReached?.Invoke();
-        onKickPeak?.Invoke();
-        Debug.Log("Boot reached peak swing position.");
-
-        elapsed = 0f;
-        while (elapsed < halfDuration)
+        if (_kickHeld)
         {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / halfDuration);
-            float eased = EaseInSine(t);
-            ApplySwing(ArcLerp(_kickLocalPosition, _restLocalPosition, eased),
-                       Quaternion.Slerp(_kickLocalRotation, _restLocalRotation, eased));
-            yield return null;
+            LastKickCharge = _kickProgress;
         }
 
-        MoveToRestInstant();
+        _kickHeld = false;
         _nextKickAllowedTime = Time.time + kickCooldown;
-        _isSwinging = false;
     }
 
     private void MoveToRestInstant()
     {
+        _kickProgress = 0f;
+        _kickHeld = false;
+        _peakInvokedForCurrentPress = false;
         transform.localPosition = _restLocalPosition;
         transform.localRotation = _restLocalRotation;
     }
@@ -132,6 +141,26 @@ public class BootSwing : MonoBehaviour
     {
         transform.localPosition = localPosition;
         transform.localRotation = localRotation;
+    }
+
+    private void SetKickProgress(float progress)
+    {
+        progress = Mathf.Clamp01(progress);
+
+        bool reachedPeak = !_peakInvokedForCurrentPress && progress >= 0.999f;
+
+        Vector3 position = ArcLerp(_restLocalPosition, _kickLocalPosition, progress);
+        Quaternion rotation = Quaternion.Slerp(_restLocalRotation, _kickLocalRotation, progress);
+
+        _kickProgress = progress;
+        ApplySwing(position, rotation);
+
+        if (reachedPeak)
+        {
+            _peakInvokedForCurrentPress = true;
+            KickPeakReached?.Invoke();
+            onKickPeak?.Invoke();
+        }
     }
 
     private Vector3 ArcLerp(Vector3 from, Vector3 to, float t)
@@ -160,13 +189,15 @@ public class BootSwing : MonoBehaviour
         return _parent != null ? Quaternion.Inverse(_parent.rotation) * worldRotation : worldRotation;
     }
 
-    private static float EaseOutSine(float t)
+    private float CalculateChargeNormalized(float holdDuration)
     {
-        return Mathf.Sin(t * Mathf.PI * 0.5f);
+        float duration = Mathf.Max(0.0001f, swingDuration);
+        return Mathf.Clamp01(holdDuration / duration);
     }
 
-    private static float EaseInSine(float t)
+    private float GetProgressStep()
     {
-        return 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
+        float duration = Mathf.Max(0.0001f, swingDuration);
+        return Time.deltaTime / duration;
     }
 }
