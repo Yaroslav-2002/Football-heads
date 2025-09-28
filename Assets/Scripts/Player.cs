@@ -1,16 +1,55 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(PlayerInput))]
+public class Player : MonoBehaviour, IControllable
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpForce = 8f;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private GameObject boot;
+
+    private Rigidbody2D _rigidbody;
+    private PlayerInput _inputController;
+    private BootSwing _boot;
+
+    private void Awake()
     {
-        
+        _boot = boot.GetComponent<BootSwing>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _inputController = GetComponent<PlayerInput>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Move(float direction)
     {
+        Vector2 velocity = _rigidbody.linearVelocity;
+        velocity.x = direction * moveSpeed;
+        _rigidbody.linearVelocity = velocity;
+    }
+
+    public void Jump()
+    {
+        if (!IsGrounded())
+            return;
         
+        _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, 0f);
+        _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+
+    public void Kick()
+    {
+        _boot.Kick();
+    }
+
+    private bool IsGrounded()
+    {
+        if (groundCheck == null)
+        {
+            return true;
+        }
+
+        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 }
