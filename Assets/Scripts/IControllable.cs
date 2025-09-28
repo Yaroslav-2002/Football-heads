@@ -1,8 +1,7 @@
-
-
 public interface IControllable
 {
-    void Jump();
-    void Kick();
     void Move(float direction);
+    void Jump();
+    void StartKick();
+    void ReleaseKick();
 }

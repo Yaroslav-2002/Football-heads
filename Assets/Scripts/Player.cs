@@ -12,14 +12,12 @@ public class Player : MonoBehaviour, IControllable
     [SerializeField] private GameObject boot;
 
     private Rigidbody2D _rigidbody;
-    private PlayerInput _inputController;
     private BootSwing _boot;
 
     private void Awake()
     {
         _boot = boot.GetComponent<BootSwing>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        _inputController = GetComponent<PlayerInput>();
     }
 
     public void Move(float direction)
@@ -32,15 +30,22 @@ public class Player : MonoBehaviour, IControllable
     public void Jump()
     {
         if (!IsGrounded())
+        {
             return;
-        
+        }
+
         _rigidbody.linearVelocity = new Vector2(_rigidbody.linearVelocity.x, 0f);
         _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
-    public void Kick()
+    public void StartKick()
     {
-        _boot.Kick();
+        _boot.BeginKickPress();
+    }
+
+    public void ReleaseKick()
+    {
+        _boot.EndKickPress();
     }
 
     private bool IsGrounded()
