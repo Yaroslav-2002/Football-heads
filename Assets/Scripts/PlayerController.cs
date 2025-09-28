@@ -40,6 +40,13 @@ public class PlayerController : MonoBehaviour
             return true;
         }
 
-        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        int layerMaskValue = groundLayer.value;
+
+        if (layerMaskValue == 0)
+        {
+            return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius) != null;
+        }
+
+        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, layerMaskValue) != null;
     }
 }
