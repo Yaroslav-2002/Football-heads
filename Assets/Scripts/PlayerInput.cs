@@ -1,12 +1,25 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [DisallowMultipleComponent]
 public class PlayerInput : MonoBehaviour
 {
+    public enum ControlScheme
+    {
+        PlayerOne,
+        PlayerTwo
+    }
+
+    [SerializeField] private ControlScheme controlScheme = ControlScheme.PlayerOne;
+
     private IControllable _controllable;
     private InputActions _inputActions;
-    private InputActions.PlayerActions _playerActions;
+    private InputActionMap _activeActionMap;
+    private InputAction _moveAction;
+    private InputAction _jumpAction;
+    private InputAction _kickAction;
+    private bool _isInitialized;
 
     private void Awake()
     {
@@ -19,49 +32,110 @@ public class PlayerInput : MonoBehaviour
         }
 
         _inputActions = new InputActions();
-        _playerActions = _inputActions.Player;
+        Configure(controlScheme);
     }
 
     private void OnEnable()
     {
-        if (_inputActions == null)
+        if (!_isInitialized)
         {
             return;
         }
 
-        _playerActions.Enable();
-        _playerActions.Jump.performed += OnJumpPerformed;
-        _playerActions.Kick.started += OnKickStarted;
-        _playerActions.Kick.canceled += OnKickCanceled;
+        EnableActions();
     }
 
     private void OnDisable()
     {
-        if (_inputActions == null)
+        if (!_isInitialized)
         {
             return;
         }
 
-        _playerActions.Jump.performed -= OnJumpPerformed;
-        _playerActions.Kick.started -= OnKickStarted;
-        _playerActions.Kick.canceled -= OnKickCanceled;
-        _playerActions.Disable();
+        DisableActions();
     }
 
     private void OnDestroy()
     {
+        if (_activeActionMap != null)
+        {
+            DisableActions();
+        }
+
         _inputActions?.Dispose();
+    }
+
+    public void Configure(ControlScheme scheme)
+    {
+        if (_inputActions == null)
+        {
+            _inputActions = new InputActions();
+        }
+
+        bool shouldReactivate = _isInitialized && enabled && gameObject.activeInHierarchy;
+        if (shouldReactivate)
+        {
+            DisableActions();
+        }
+
+        controlScheme = scheme;
+        (_activeActionMap, _moveAction, _jumpAction, _kickAction) = ResolveActions(scheme);
+        _isInitialized = _activeActionMap != null;
+
+        if (shouldReactivate)
+        {
+            EnableActions();
+        }
     }
 
     private void Update()
     {
-        if (_controllable == null || _inputActions == null)
+        if (!_isInitialized)
         {
             return;
         }
 
-        Vector2 moveInput = _playerActions.Move.ReadValue<Vector2>();
+        Vector2 moveInput = _moveAction.ReadValue<Vector2>();
         _controllable.Move(moveInput.x);
+    }
+
+    private void EnableActions()
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
+        _activeActionMap.Enable();
+        _jumpAction.performed += OnJumpPerformed;
+        _kickAction.started += OnKickStarted;
+        _kickAction.canceled += OnKickCanceled;
+    }
+
+    private void DisableActions()
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
+        _jumpAction.performed -= OnJumpPerformed;
+        _kickAction.started -= OnKickStarted;
+        _kickAction.canceled -= OnKickCanceled;
+        _activeActionMap.Disable();
+    }
+
+    private (InputActionMap map, InputAction move, InputAction jump, InputAction kick) ResolveActions(ControlScheme scheme)
+    {
+        InputActions.PlayerOneActions playerOne = _inputActions.PlayerOne;
+        InputActions.PlayerTwoActions playerTwo = _inputActions.PlayerTwo;
+
+        return scheme switch
+        {
+            ControlScheme.PlayerOne => (playerOne.Get(), playerOne.Move, playerOne.Jump, playerOne.Kick),
+            ControlScheme.PlayerTwo => (playerTwo.Get(), playerTwo.Move, playerTwo.Jump, playerTwo.Kick),
+            _ => throw new ArgumentOutOfRangeException(nameof(scheme), scheme, null)
+        };
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
