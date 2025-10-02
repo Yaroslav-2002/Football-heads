@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,12 +10,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<PlayerSpawnSettings> playerSpawnSettings = new();
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform ballSpawnPoint;
-    [SerializeField, Tooltip("Fallback prefab used if no player spawn settings are configured.")]
-    private GameObject playerPrefab;
-    [SerializeField, Tooltip("Optional fallback spawn point for the first player when using legacy configuration.")]
-    private Transform playerRightSpawnPoint;
-    [SerializeField, Tooltip("Optional fallback spawn point for the second player when using legacy configuration.")]
-    private Transform playerLeftSpawnPoint;
+
+    [SerializeField] private BoxCollider2D gatesColliderLeft;
+    [SerializeField] private BoxCollider2D gatesColliderRight;
 
     private readonly Dictionary<PlayerInput.ControlScheme, GameObject> _playerInstances = new();
     private IEntitySpawner _entitySpawner;
@@ -114,17 +112,10 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+    }
 
-        if (playerPrefab == null)
-        {
-            Debug.LogWarning("GameManager: Player prefab is not configured.");
-            return;
-        }
-
-        playerSpawnSettings = new List<PlayerSpawnSettings>
-        {
-            new PlayerSpawnSettings("PlayerOne", playerPrefab, playerRightSpawnPoint, PlayerInput.ControlScheme.PlayerOne),
-            new PlayerSpawnSettings("PlayerTwo", playerPrefab, playerLeftSpawnPoint, PlayerInput.ControlScheme.PlayerTwo)
-        };
+    internal void GoalScored(int gateId)
+    {
+        throw new NotImplementedException();
     }
 }
