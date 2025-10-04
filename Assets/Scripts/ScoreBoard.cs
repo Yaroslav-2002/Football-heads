@@ -1,14 +1,38 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 public class ScoreBoard : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI _scoreLeft;
-    [SerializeField] TextMeshProUGUI _scoreRight;
+    [SerializeField] TextMeshProUGUI scoreLeft;
+    [SerializeField] TextMeshProUGUI scoreRight;
 
-    public void SetScore(int scoreLeft, int scoreRight)
+    private int _playerLeftPoints;
+    private int _playerRightPoints;
+
+    private void Awake()
     {
-        _scoreLeft.text = scoreLeft.ToString();
-        _scoreRight.text = scoreRight.ToString();
+        _playerLeftPoints = 0;
+        _playerRightPoints = 0;
+    }
+
+    public void SetScore(int scoreLeftPoints, int scoreRightPoints)
+    {
+        scoreLeft.text = scoreLeftPoints.ToString();
+        scoreRight.text = scoreRightPoints.ToString();
+    }
+
+    internal void UpdateScore(int gateId)
+    {
+        switch (gateId) {
+            case 0:
+                _playerLeftPoints += 1;
+                break;
+            case 1:
+                _playerRightPoints += 1;
+                break;
+        }
+
+        SetScore(_playerLeftPoints, _playerRightPoints);
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class GoalTrigger : MonoBehaviour
 {
     [SerializeField] private int gateId;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameInitializer gameManager;
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -1,34 +1,74 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEntitySpawner
+public class EntitySpawner : MonoBehaviour
 {
-    GameObject Spawn(GameObject prefab, Transform spawnPoint);
-    GameObject Replace(GameObject prefab, GameObject currentInstance, Transform spawnPoint);
-}
+    [SerializeField] private List<PlayerSpawnSettings> playerSpawnSettings = new();
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private Transform ballSpawnPoint;
 
-public sealed class EntitySpawner : IEntitySpawner
-{
+    private readonly Dictionary<TeamSide, GameObject> _playerInstances = new();
+    private GameObject _ballInstance;
+
+    public IReadOnlyDictionary<TeamSide, GameObject> PlayerInstances => _playerInstances;
+    public GameObject BallInstance => _ballInstance;
+
     public GameObject Spawn(GameObject prefab, Transform spawnPoint)
     {
-        if (prefab == null)
-        {
-            Debug.LogError("EntitySpawner: Prefab is not assigned.");
-            return null;
-        }
-
         Vector3 position = spawnPoint != null ? spawnPoint.position : Vector3.zero;
         Quaternion rotation = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
 
-        return Object.Instantiate(prefab, position, rotation);
+        return Instantiate(prefab, position, rotation);
     }
 
-    public GameObject Replace(GameObject prefab, GameObject currentInstance, Transform spawnPoint)
+    public void SpawnPlayers()
     {
-        if (currentInstance != null)
+        foreach (PlayerSpawnSettings settings in playerSpawnSettings)
         {
-            Object.Destroy(currentInstance);
+            if (settings == null)
+                continue;
+
+            GameObject playerInstance = Spawn(playerPrefab, settings.SpawnPoint);
+
+            if (playerInstance == null)
+                continue;
+            Configure(playerInstance, settings.ControlScheme);
+            _playerInstances[settings.Team] = playerInstance;
+        }
+    }
+
+    private void Configure(GameObject playerObject, PlayerInput.ControlScheme controlScheme)
+    {
+        if (playerObject == null)
+        {
+            return;
         }
 
-        return Spawn(prefab, spawnPoint);
+        PlayerInput playerInput = playerObject.GetComponent<PlayerInput>();
+        if (playerInput == null)
+        {
+            Debug.LogWarning($"PlayerConfigurator: {playerObject.name} is missing a PlayerInput component.", playerObject);
+            return;
+        }
+
+        playerInput.Configure(controlScheme);
+    }
+
+    public GameObject GetPlayer(TeamSide team)
+    {
+        return _playerInstances.TryGetValue(team, out GameObject instance) ? instance : null;
+
+    }
+
+    public void SpawnBall()
+    {
+        _ballInstance = Spawn(ballPrefab, ballSpawnPoint);
+    }
+
+    internal void SpawnEntities()
+    {
+        SpawnPlayers();
+        SpawnBall();
     }
 }
