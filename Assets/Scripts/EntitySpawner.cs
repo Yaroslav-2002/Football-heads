@@ -8,10 +8,10 @@ public class EntitySpawner : MonoBehaviour
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private Transform ballSpawnPoint;
 
-    private readonly Dictionary<TeamSide, GameObject> _playerInstances = new();
+    private readonly Dictionary<string, GameObject> _playerInstances = new();
     private GameObject _ballInstance;
 
-    public IReadOnlyDictionary<TeamSide, GameObject> PlayerInstances => _playerInstances;
+    public IReadOnlyDictionary<string, GameObject> PlayerInstances => _playerInstances;
     public GameObject BallInstance => _ballInstance;
 
     public GameObject Spawn(GameObject prefab, Transform spawnPoint)
@@ -34,7 +34,14 @@ public class EntitySpawner : MonoBehaviour
             if (playerInstance == null)
                 continue;
             Configure(playerInstance, settings.ControlScheme);
-            _playerInstances[settings.Team] = playerInstance;
+            string playerId = settings.Identifier;
+            if (string.IsNullOrWhiteSpace(playerId))
+            {
+                Debug.LogWarning($"EntitySpawner: Player identifier is invalid. Using {playerInstance.name} as fallback.");
+                playerId = playerInstance.name;
+            }
+
+            _playerInstances[playerId] = playerInstance;
         }
     }
 
@@ -48,16 +55,21 @@ public class EntitySpawner : MonoBehaviour
         PlayerInput playerInput = playerObject.GetComponent<PlayerInput>();
         if (playerInput == null)
         {
-            Debug.LogWarning($"PlayerConfigurator: {playerObject.name} is missing a PlayerInput component.", playerObject);
+            Debug.LogWarning($"EntitySpawner: {playerObject.name} is missing a PlayerInput component.", playerObject);
             return;
         }
 
         playerInput.Configure(controlScheme);
     }
 
-    public GameObject GetPlayer(TeamSide team)
+    public GameObject GetPlayer(string playerId)
     {
-        return _playerInstances.TryGetValue(team, out GameObject instance) ? instance : null;
+        if (string.IsNullOrWhiteSpace(playerId))
+        {
+            return null;
+        }
+
+        return _playerInstances.TryGetValue(playerId, out GameObject instance) ? instance : null;
 
     }
 
