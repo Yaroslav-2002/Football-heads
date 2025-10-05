@@ -427,6 +427,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapColliders
       objectReference: {fileID: 0}
+    - target: {fileID: 5427334780109305446, guid: 4a1d5c84ab610a14cba87a7810879230, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -452,7 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a77d7d4bcd29064499f88a9c0e18a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  gateId: 0
+  scoringTeam: 0
   gameManager: {fileID: 0}
 --- !u!1 &1281043281
 GameObject:
@@ -591,6 +595,62 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &1325973125
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1325973127}
+  - component: {fileID: 1325973126}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1325973126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325973125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f327a6f3d7d4ec9a3a06b6e8f81a6ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntitySpawner
+  playerSpawnSettings:
+  - identifier: 1
+    spawnPoint: {fileID: 326928550}
+    controlScheme: 0
+    team: 0
+  - identifier: 2
+    spawnPoint: {fileID: 437234391}
+    controlScheme: 1
+    team: 1
+  playerPrefab: {fileID: 6757439585877526867, guid: 1af08a5468993874ea7cb71e0d6acffa, type: 3}
+  ballPrefab: {fileID: 929542034098923931, guid: 424d3420b7e26684d8e5098158a00966, type: 3}
+  ballSpawnPoint: {fileID: 1843978526}
+--- !u!4 &1325973127
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325973125}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1843978525
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,7 +693,7 @@ GameObject:
   - component: {fileID: 2000000002}
   - component: {fileID: 2000000003}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: GameInitializer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -666,19 +726,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbd41192b25946eca426bbf9dfed9c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpawnSettings:
-  - identifier: 1
-    playerPrefab: {fileID: 6757439585877526867, guid: 1af08a5468993874ea7cb71e0d6acffa, type: 3}
-    spawnPoint: {fileID: 326928550}
-    controlScheme: 0
-  - identifier: 2
-    playerPrefab: {fileID: 6757439585877526867, guid: 1af08a5468993874ea7cb71e0d6acffa, type: 3}
-    spawnPoint: {fileID: 437234391}
-    controlScheme: 1
-  ballPrefab: {fileID: 929542034098923931, guid: 424d3420b7e26684d8e5098158a00966, type: 3}
-  ballSpawnPoint: {fileID: 1843978526}
-  gatesColliderLeft: {fileID: 0}
-  gatesColliderRight: {fileID: 0}
+  spawner: {fileID: 1325973126}
+  scoreBoard: {fileID: 3323043939871087418}
 --- !u!1 &2091154849
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,8 +995,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd42dd3855a4d540aec4b5391673dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _scoreLeft: {fileID: 0}
-  _scoreRight: {fileID: 0}
+  scoreLeft: {fileID: 0}
+  scoreRight: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -962,3 +1011,4 @@ SceneRoots:
   - {fileID: 437234391}
   - {fileID: 672712063}
   - {fileID: 369246977}
+  - {fileID: 1325973127}
