@@ -4,8 +4,6 @@ public class GameInitializer : MonoBehaviour
 {
     private static GameInitializer _instance;
 
-    [SerializeField] private BoxCollider2D gatesColliderLeft;
-    [SerializeField] private BoxCollider2D gatesColliderRight;
     [SerializeField] private EntitySpawner spawner;
     [SerializeField] private ScoreBoard scoreBoard;
 

@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 337898265154340585}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.052999765, y: -0.9709999, z: 0}
+  m_LocalPosition: {x: 0.05299977, y: -0.9709999, z: 0}
   m_LocalScale: {x: 0.14999999, y: 0.152, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kickPosition: {fileID: 4694671919114798846}
-  swingDuration: 0.35
+  swingDuration: 0.225
   kickCooldown: 0.25
   onKickPeak:
     m_PersistentCalls:
@@ -294,8 +294,9 @@ GameObject:
   - component: {fileID: 5392653173384048562}
   - component: {fileID: 7657675285055145745}
   - component: {fileID: 8549101775491312785}
+  - component: {fileID: 1405306481578629402}
   m_Layer: 6
-  m_Name: PlayerOne
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -331,14 +332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a7718e602b06a42a7a243267e88d9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 4
-  groundCheck: {fileID: 1769255616701553581}
-  groundCheckRadius: 0.2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  boot: {fileID: 337898265154340585}
+  boot: {fileID: 6154361316095865010}
+  movement: {fileID: 1405306481578629402}
+  input: {fileID: 8549101775491312785}
 --- !u!50 &5392653173384048562
 Rigidbody2D:
   serializedVersion: 5
@@ -413,4 +409,23 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3aee7698f04b4d3b2dc59ed1a1e5283, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
+--- !u!114 &1405306481578629402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6757439585877526867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0283229347b53934da89e3c543a6aebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Movement
+  moveSpeed: 5
+  jumpForce: 8
+  groundCheck: {fileID: 1769255616701553581}
+  groundCheckRadius: 0.05
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256

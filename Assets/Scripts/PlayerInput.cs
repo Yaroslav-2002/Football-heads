@@ -5,16 +5,16 @@ using UnityEngine.InputSystem;
 [DisallowMultipleComponent]
 public class PlayerInput : MonoBehaviour
 {
+    private InputActions _inputActions;
+
     public enum ControlScheme
     {
         PlayerOne,
         PlayerTwo
     }
 
-    [SerializeField] private ControlScheme controlScheme = ControlScheme.PlayerOne;
-
+    private ControlScheme _controlScheme;
     private IControllable _controllable;
-    private InputActions _inputActions;
     private InputActionMap _activeActionMap;
     private InputAction _moveAction;
     private InputAction _jumpAction;
@@ -30,9 +30,9 @@ public class PlayerInput : MonoBehaviour
             enabled = false;
             return;
         }
-
         _inputActions = new InputActions();
-        Configure(controlScheme);
+
+        Configure(_controlScheme);
     }
 
     private void OnEnable()
@@ -67,18 +67,13 @@ public class PlayerInput : MonoBehaviour
 
     public void Configure(ControlScheme scheme)
     {
-        if (_inputActions == null)
-        {
-            _inputActions = new InputActions();
-        }
-
         bool shouldReactivate = _isInitialized && enabled && gameObject.activeInHierarchy;
         if (shouldReactivate)
         {
             DisableActions();
         }
 
-        controlScheme = scheme;
+        _controlScheme = scheme;
         (_activeActionMap, _moveAction, _jumpAction, _kickAction) = ResolveActions(scheme);
         _isInitialized = _activeActionMap != null;
 

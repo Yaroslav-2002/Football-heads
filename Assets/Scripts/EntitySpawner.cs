@@ -28,49 +28,17 @@ public class EntitySpawner : MonoBehaviour
         {
             if (settings == null)
                 continue;
+            
+             var playerInstance = Spawn(playerPrefab, settings.SpawnPoint);
+            playerInstance.GetComponent<Player>().Init(settings);
 
-            GameObject playerInstance = Spawn(playerPrefab, settings.SpawnPoint);
-
-            if (playerInstance == null)
-                continue;
-            Configure(playerInstance, settings.ControlScheme);
-            string playerId = settings.Identifier;
-            if (string.IsNullOrWhiteSpace(playerId))
-            {
-                Debug.LogWarning($"EntitySpawner: Player identifier is invalid. Using {playerInstance.name} as fallback.");
-                playerId = playerInstance.name;
-            }
-
-            _playerInstances[playerId] = playerInstance;
+            _playerInstances.Add(settings.Identifier, playerInstance);
         }
     }
 
-    private void Configure(GameObject playerObject, PlayerInput.ControlScheme controlScheme)
+    public GameObject GetPlayer(string id)
     {
-        if (playerObject == null)
-        {
-            return;
-        }
-
-        PlayerInput playerInput = playerObject.GetComponent<PlayerInput>();
-        if (playerInput == null)
-        {
-            Debug.LogWarning($"EntitySpawner: {playerObject.name} is missing a PlayerInput component.", playerObject);
-            return;
-        }
-
-        playerInput.Configure(controlScheme);
-    }
-
-    public GameObject GetPlayer(string playerId)
-    {
-        if (string.IsNullOrWhiteSpace(playerId))
-        {
-            return null;
-        }
-
-        return _playerInstances.TryGetValue(playerId, out GameObject instance) ? instance : null;
-
+        return _playerInstances.TryGetValue(id, out GameObject instance) ? instance : null;
     }
 
     public void SpawnBall()
