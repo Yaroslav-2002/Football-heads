@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EntitySpawner : MonoBehaviour
 {
@@ -50,5 +51,17 @@ public class EntitySpawner : MonoBehaviour
     {
         SpawnPlayers();
         SpawnBall();
+    }
+
+    public void Respawn()
+    {
+        foreach(var settings in playerSpawnSettings) {
+            var playerTransfrom = GetPlayer(settings.Identifier).transform;
+            playerTransfrom.position = settings.SpawnPoint.position;
+            playerTransfrom.rotation = settings.SpawnPoint.rotation;
+        }
+
+        BallInstance.transform.position = ballSpawnPoint.position;
+        BallInstance.transform.rotation = ballSpawnPoint.rotation;
     }
 }

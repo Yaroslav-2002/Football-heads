@@ -13,6 +13,9 @@ public class BootSwing : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float kickCooldown = 0.25f;
 
+    [Min(0f)]
+    [SerializeField] private float kickForce = 0.25f;
+
     [Header("Events")]
     [SerializeField] private UnityEvent onKickPeak;
 
@@ -65,6 +68,15 @@ public class BootSwing : MonoBehaviour
             {
                 _peakInvokedForCurrentPress = false;
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.tag == "Ball")
+        {
+            Vector2 direction = (collision.collider.transform.position - transform.position).normalized;
+            collision.rigidbody.AddForce(direction * kickForce, ForceMode2D.Impulse);
         }
     }
 

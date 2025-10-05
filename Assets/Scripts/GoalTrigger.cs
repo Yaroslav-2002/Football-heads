@@ -1,15 +1,19 @@
+using System;
 using UnityEngine;
 
 public class GoalTrigger : MonoBehaviour
 {
     [SerializeField] private TeamSide scoringTeam;
-    [SerializeField] private GameInitializer gameManager;
+    [SerializeField] private ScoreBoard scoreBoard;
+
+    public Action<TeamSide> OnGoalScored;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ball"))
         {
-            gameManager.GoalScored(scoringTeam);
+            scoreBoard.UpdateScore(scoringTeam);
+            OnGoalScored(scoringTeam);
         }
     }
 }

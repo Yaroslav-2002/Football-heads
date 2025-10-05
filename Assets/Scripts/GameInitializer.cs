@@ -6,6 +6,8 @@ public class GameInitializer : MonoBehaviour
 
     [SerializeField] private EntitySpawner spawner;
     [SerializeField] private ScoreBoard scoreBoard;
+    [SerializeField] private GoalTrigger leftTrigger;
+    [SerializeField] private GoalTrigger rightTrigger;
 
     private void Awake()
     {
@@ -17,6 +19,18 @@ public class GameInitializer : MonoBehaviour
 
         _instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()
+    {
+        leftTrigger.OnGoalScored += Restart;
+        rightTrigger.OnGoalScored += Restart;
+    }
+
+    private void OnDisable()
+    {
+        leftTrigger.OnGoalScored -= Restart;
+        rightTrigger.OnGoalScored -= Restart;
     }
 
     private void Start()
@@ -33,5 +47,10 @@ public class GameInitializer : MonoBehaviour
     internal void GoalScored(TeamSide scoringTeam)
     {
         scoreBoard.UpdateScore(scoringTeam);
+    }
+
+    private void Restart(TeamSide scoringTeam)
+    {
+        spawner.Respawn();
     }
 }
