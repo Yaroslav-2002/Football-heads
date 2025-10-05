@@ -32,8 +32,8 @@ public class GameInitializer : MonoBehaviour
         spawner.SpawnBall();
     }
 
-    internal void GoalScored(int gateId)
+    internal void GoalScored(TeamSide scoringTeam)
     {
-        scoreBoard.UpdateScore(gateId);
+        scoreBoard.UpdateScore(scoringTeam);
     }
 }

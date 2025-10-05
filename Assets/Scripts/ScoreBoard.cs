@@ -22,15 +22,18 @@ public class ScoreBoard : MonoBehaviour
         scoreRight.text = scoreRightPoints.ToString();
     }
 
-    internal void UpdateScore(int gateId)
+    internal void UpdateScore(TeamSide scoringTeam)
     {
-        switch (gateId) {
-            case 0:
+        switch (scoringTeam)
+        {
+            case TeamSide.Left:
                 _playerLeftPoints += 1;
                 break;
-            case 1:
+            case TeamSide.Right:
                 _playerRightPoints += 1;
                 break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(scoringTeam), scoringTeam, null);
         }
 
         SetScore(_playerLeftPoints, _playerRightPoints);
