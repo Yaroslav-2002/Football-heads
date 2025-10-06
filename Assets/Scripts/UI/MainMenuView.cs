@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,10 +11,20 @@ public class MainMenuView : View
 
     public override void Init()
     {
-        exitButton.onClick.AddListener(OnExitButtonClick);
-        settingsButton.onClick.AddListener(() => ViewManager.Show<SettingsView>());
-        
-        startButton.onClick.AddListener(() => OnStartButtonClicked());
+        if (exitButton != null)
+        {
+            exitButton.onClick.AddListener(OnExitButtonClick);
+        }
+
+        if (settingsButton != null)
+        {
+            settingsButton.onClick.AddListener(() => ViewManager.Show<SettingsView>());
+        }
+
+        if (startButton != null)
+        {
+            startButton.onClick.AddListener(OnStartButtonClicked);
+        }
     }
 
     private void OnStartButtonClicked()

@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ViewManager : MonoBehaviour
 {
@@ -9,49 +9,110 @@ public class ViewManager : MonoBehaviour
 
     private View currentView;
 
-    public Stack<View> history = new();
+    private readonly Stack<View> history = new();
 
     private void Awake()
     {
         instance = this;
+
+        if (views == null || views.Length == 0)
+        {
+            Debug.LogWarning("ViewManager has no registered views.");
+        }
+        else
+        {
+            foreach (var view in views)
+            {
+                if (view == null)
+                {
+                    continue;
+                }
+
+                view.Initialize();
+                view.Hide();
+            }
+        }
+
+        if (startingView != null)
+        {
+            Show(startingView, false);
+        }
     }
 
     public static T GetView<T>() where T : View
     {
-        foreach (var view in instance.views)
+        if (instance == null)
         {
-            if (view is T) return (T)view;
+            Debug.LogError("ViewManager is not initialised yet.");
+            return null;
         }
 
-        Debug.Log($"No such view {typeof(T).Name}");
+        foreach (var view in instance.views)
+        {
+            if (view is T typedView)
+            {
+                return typedView;
+            }
+        }
+
+        Debug.LogWarning($"No such view {typeof(T).Name}");
         return null;
     }
 
     public static void Show<T>(bool remember = true) where T : View
     {
+        if (instance == null)
+        {
+            Debug.LogError("ViewManager is not initialised yet.");
+            return;
+        }
+
         foreach (var view in instance.views)
         {
-            if (view is not T)
-                continue;
-
-            if (instance.currentView != null)
+            if (view is T typedView)
             {
-                if (remember)
-                {
-                    instance.history.Push(instance.currentView);
-                }
-
-                instance.currentView.Hide();
-
-                view.Show();
-                instance.currentView = view;
+                ShowInternal(typedView, remember);
+                return;
             }
         }
 
-        Debug.Log($"No such view {typeof(T).Name}");
+        Debug.LogWarning($"No such view {typeof(T).Name}");
     }
 
     public static void Show(View view, bool remember = true)
+    {
+        if (instance == null)
+        {
+            Debug.LogError("ViewManager is not initialised yet.");
+            return;
+        }
+
+        if (view == null)
+        {
+            Debug.LogError("Trying to show a null view.");
+            return;
+        }
+
+        ShowInternal(view, remember);
+    }
+
+    public static void ShowLast()
+    {
+        if (instance == null)
+        {
+            Debug.LogError("ViewManager is not initialised yet.");
+            return;
+        }
+
+        if (instance.history.Count == 0)
+        {
+            return;
+        }
+
+        Show(instance.history.Pop(), false);
+    }
+
+    private static void ShowInternal(View view, bool remember)
     {
         if (instance.currentView != null)
         {
@@ -63,15 +124,9 @@ public class ViewManager : MonoBehaviour
             instance.currentView.Hide();
         }
 
+        view.Initialize();
         view.Show();
         instance.currentView = view;
     }
-
-    public static void ShowLast()
-    {
-        if(instance.history.Count != 0)
-        {
-            Show(instance.history.Pop(), false);
-        }
-    }
 }
+
