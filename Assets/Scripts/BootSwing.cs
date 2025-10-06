@@ -73,10 +73,10 @@ public class BootSwing : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.collider.tag == "Ball")
+        if (collision.collider.CompareTag("Ball"))
         {
-            Vector2 direction = (collision.collider.transform.position - transform.position).normalized;
-            collision.rigidbody.AddForce(direction * kickForce, ForceMode2D.Impulse);
+            Vector2 dir = -collision.GetContact(0).normal;
+            collision.rigidbody.AddForce(dir * kickForce, ForceMode2D.Impulse);
         }
     }
 

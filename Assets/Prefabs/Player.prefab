@@ -157,7 +157,7 @@ MonoBehaviour:
   kickPosition: {fileID: 4694671919114798846}
   swingDuration: 0.225
   kickCooldown: 0.25
-  kickForce: 5
+  kickForce: 8
   onKickPeak:
     m_PersistentCalls:
       m_Calls: []
