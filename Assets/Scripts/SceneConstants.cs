@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-public static class Constants
+public static class SceneConstants
 {
     public const string SCENE_START = "Start";
     public const string SCENE_MENU = "Menu";
