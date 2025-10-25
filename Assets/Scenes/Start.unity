@@ -508,7 +508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StartScreenController
   viewManager: {fileID: 8008064462618775314, guid: 356bac5ff53cd104fac37e3032b42a83, type: 3}
   text: {fileID: 267983517}
-  camera: {fileID: 960922905}
+  mainCamera: {fileID: 960922905}
 --- !u!114 &1312961981
 MonoBehaviour:
   m_ObjectHideFlags: 0

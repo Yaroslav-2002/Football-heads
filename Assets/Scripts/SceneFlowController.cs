@@ -1,16 +1,8 @@
 using System.Collections.Generic;
 
-public enum SceneType
+public static class Constants
 {
-    Menu,
-    Game,
-}
-
-public static class SceneNames
-{
-    public static readonly Dictionary<SceneType, string> Map = new()
-    {
-        { SceneType.Menu, "Menu" },
-        { SceneType.Game, "Game" },
-    };
+    public const string SCENE_START = "Start";
+    public const string SCENE_MENU = "Menu";
+    public const string SCENE_MAIN = "Main";
 }

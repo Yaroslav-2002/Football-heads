@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,6 +8,7 @@ public class GameSettingsView : View
     [SerializeField] Button restartGameButton;
     [SerializeField] Button exitToMenuButton;
     private EntitySpawner spawner;
+    private AsyncOperation _load;
 
     public override void Init()
     {
@@ -18,11 +19,21 @@ public class GameSettingsView : View
 
         if (exitToMenuButton != null)
         {
-            exitToMenuButton.onClick.AddListener(() => SceneManager.LoadSceneAsync(SceneNames.Map[SceneType.Menu]));
+            exitToMenuButton.onClick.AddListener(() => OnExitButtonClicked());
         }
 
         if(spawner == null)
-            spawner = GameObject.FindAnyObjectByType<EntitySpawner>();
+            spawner = FindAnyObjectByType<EntitySpawner>();
+    }
+
+    private IEnumerator OnExitButtonClicked()
+    {
+        _load = SceneManager.LoadSceneAsync(Constants.SCENE_MENU, LoadSceneMode.Single);
+
+        if (_load.isDone)
+            yield return null;
+        
+        ViewManager.Show<MainMenuView>();
     }
 
     private void OnRestartButtonClicked()

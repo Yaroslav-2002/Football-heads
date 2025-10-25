@@ -7,11 +7,6 @@ public class GameInitializer : MonoBehaviour
     [SerializeField] private GoalTrigger leftTrigger;
     [SerializeField] private GoalTrigger rightTrigger;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
     private void OnEnable()
     {
         leftTrigger.OnGoalScored += OnGoalScored;
@@ -23,6 +18,7 @@ public class GameInitializer : MonoBehaviour
         leftTrigger.OnGoalScored -= OnGoalScored;
         rightTrigger.OnGoalScored -= OnGoalScored;
     }
+
     private void Start()
     {
         InitializeGame();
