@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ViewManager : MonoBehaviour
 {
@@ -36,6 +37,26 @@ public class ViewManager : MonoBehaviour
         if (startingView != null)
         {
             Show(startingView, false);
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == SceneNames.Map[SceneType.Game])
+        {
+            Show<GUI>();
         }
     }
 

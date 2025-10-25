@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class MainMenuView : View
 {
-    private const int MAIN_SCENE_NUM = 1;
     [SerializeField] Button exitButton;
     [SerializeField] Button settingsButton;
     [SerializeField] Button startButton;
@@ -29,7 +28,7 @@ public class MainMenuView : View
 
     private void OnStartButtonClicked()
     {
-        SceneManager.LoadSceneAsync(MAIN_SCENE_NUM);
+        SceneManager.LoadSceneAsync(SceneNames.Map[SceneType.Game]);
     }
 
     void OnExitButtonClick()

@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    private static GameInitializer _instance;
-
     [SerializeField] private EntitySpawner spawner;
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private GoalTrigger leftTrigger;
@@ -11,28 +9,20 @@ public class GameInitializer : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
     {
-        leftTrigger.OnGoalScored += Restart;
-        rightTrigger.OnGoalScored += Restart;
+        leftTrigger.OnGoalScored += OnGoalScored;
+        rightTrigger.OnGoalScored += OnGoalScored;
     }
 
     private void OnDisable()
     {
-        leftTrigger.OnGoalScored -= Restart;
-        rightTrigger.OnGoalScored -= Restart;
+        leftTrigger.OnGoalScored -= OnGoalScored;
+        rightTrigger.OnGoalScored -= OnGoalScored;
     }
-
     private void Start()
     {
         InitializeGame();
@@ -44,13 +34,9 @@ public class GameInitializer : MonoBehaviour
         spawner.SpawnBall();
     }
 
-    internal void GoalScored(TeamSide scoringTeam)
-    {
-        scoreBoard.UpdateScore(scoringTeam);
-    }
-
-    private void Restart(TeamSide scoringTeam)
+    private void OnGoalScored(TeamSide scoringTeam)
     {
         spawner.Respawn();
+        scoreBoard.UpdateScore(scoringTeam);
     }
 }

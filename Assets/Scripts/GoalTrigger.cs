@@ -4,7 +4,6 @@ using UnityEngine;
 public class GoalTrigger : MonoBehaviour
 {
     [SerializeField] private TeamSide scoringTeam;
-    [SerializeField] private ScoreBoard scoreBoard;
 
     public Action<TeamSide> OnGoalScored;
 
@@ -12,7 +11,6 @@ public class GoalTrigger : MonoBehaviour
     {
         if (other.CompareTag("Ball"))
         {
-            scoreBoard.UpdateScore(scoringTeam);
             OnGoalScored(scoringTeam);
         }
     }
