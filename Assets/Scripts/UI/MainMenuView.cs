@@ -28,7 +28,7 @@ public class MainMenuView : View
 
     private void OnStartButtonClicked()
     {
-        SceneManager.LoadSceneAsync(Constants.SCENE_MAIN);
+        SceneManager.LoadSceneAsync(SceneConstants.SCENE_MAIN);
     }
 
     void OnExitButtonClick()

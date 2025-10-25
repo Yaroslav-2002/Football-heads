@@ -28,7 +28,7 @@ public class GameSettingsView : View
 
     private IEnumerator OnExitButtonClicked()
     {
-        _load = SceneManager.LoadSceneAsync(Constants.SCENE_MENU, LoadSceneMode.Single);
+        _load = SceneManager.LoadSceneAsync(SceneConstants.SCENE_MENU, LoadSceneMode.Single);
 
         if (_load.isDone)
             yield return null;
