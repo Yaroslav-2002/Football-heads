@@ -7,6 +7,9 @@ public class ViewManager : MonoBehaviour
     private static ViewManager instance;
     [SerializeField] private View startingView;
     [SerializeField] private View[] views;
+    [SerializeField] private Camera cameraPrefab;
+
+    private Camera _camera;
 
     private View currentView;
 
@@ -34,12 +37,26 @@ public class ViewManager : MonoBehaviour
             }
         }
 
+        DontDestroyOnLoad(gameObject);
+
+        if (cameraPrefab)
+        {
+            InitCamera();
+        }
+
         if (startingView != null)
         {
             Show(startingView, false);
         }
+    }
+    private void InitCamera()
+    {
+        _camera = Instantiate(cameraPrefab);
+        var canvas = GetComponent<Canvas>();
+        canvas.worldCamera = _camera;
+        canvas.planeDistance = _camera.farClipPlane / 2;
 
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(_camera);
     }
 
     private void OnEnable()

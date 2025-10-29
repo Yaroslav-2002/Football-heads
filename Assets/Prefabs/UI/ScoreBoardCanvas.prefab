@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6fda76185698aa4285ae38b395d5a26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  gameSettingsButton: {fileID: 0}
 --- !u!1001 &5094075713731659165
 PrefabInstance:
   m_ObjectHideFlags: 0

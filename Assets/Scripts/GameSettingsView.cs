@@ -19,18 +19,15 @@ public class GameSettingsView : View
 
         if (exitToMenuButton != null)
         {
-            exitToMenuButton.onClick.AddListener(() => OnExitButtonClicked());
+            exitToMenuButton.onClick.AddListener(() => StartCoroutine(OnExitButtonClicked()));
         }
-
-        if(spawner == null)
-            spawner = FindAnyObjectByType<EntitySpawner>();
     }
 
     private IEnumerator OnExitButtonClicked()
     {
         _load = SceneManager.LoadSceneAsync(SceneConstants.SCENE_MENU, LoadSceneMode.Single);
 
-        if (_load.isDone)
+        if (!_load.isDone)
             yield return null;
         
         ViewManager.Show<MainMenuView>();
@@ -38,6 +35,9 @@ public class GameSettingsView : View
 
     private void OnRestartButtonClicked()
     {
+        if (spawner == null)
+            spawner = FindAnyObjectByType<EntitySpawner>();
+
         spawner?.Respawn();
         Hide();
     }

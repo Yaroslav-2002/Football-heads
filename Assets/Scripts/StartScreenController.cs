@@ -7,25 +7,23 @@ public class StartScreenController : MonoBehaviour
 {
     [SerializeField] ViewManager viewManager;
     [SerializeField] TextMeshProUGUI text;
-    [SerializeField] GameObject mainCamera;
 
     private AsyncOperation _load;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
-        DontDestroyOnLoad(mainCamera);
     }
 
     private IEnumerator Start()
     {
-        _load = SceneManager.LoadSceneAsync(SceneConstants.SCENE_MENU, LoadSceneMode.Single);
-
         Instantiate(viewManager);
+
+        _load = SceneManager.LoadSceneAsync(SceneConstants.SCENE_MENU, LoadSceneMode.Single);
 
         if (!_load.isDone)
             yield return null;
-        
+
         Destroy(gameObject);
     }
 
