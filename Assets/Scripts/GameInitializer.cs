@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    [SerializeField] private EntitySpawner spawner;
+    [SerializeField] private EntitySpawnerBase spawner;
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private GoalTrigger leftTrigger;
     [SerializeField] private GoalTrigger rightTrigger;
@@ -26,8 +26,7 @@ public class GameInitializer : MonoBehaviour
 
     public void InitializeGame()
     {
-        spawner.SpawnPlayers();
-        spawner.SpawnBall();
+        spawner.SpawnEntities();
     }
 
     private void OnGoalScored(TeamSide scoringTeam)

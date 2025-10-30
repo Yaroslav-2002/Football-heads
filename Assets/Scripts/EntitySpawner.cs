@@ -1,66 +1,16 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EntitySpawner : MonoBehaviour
+public class EntitySpawner : EntitySpawnerBase
 {
-    [SerializeField] private List<PlayerSpawnSettings> playerSpawnSettings = new();
-    [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private GameObject ballPrefab;
-    [SerializeField] private Transform ballSpawnPoint;
-
-    private readonly Dictionary<string, GameObject> _playerInstances = new();
-    private GameObject _ballInstance;
-
-    public IReadOnlyDictionary<string, GameObject> PlayerInstances => _playerInstances;
-    public GameObject BallInstance => _ballInstance;
-
-    public GameObject Spawn(GameObject prefab, Transform spawnPoint)
+    protected override void InitializePlayer(GameObject playerInstance, PlayerSpawnSettings settings)
     {
-        Vector3 position = spawnPoint != null ? spawnPoint.position : Vector3.zero;
-        Quaternion rotation = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
-
-        return Instantiate(prefab, position, rotation);
-    }
-
-    public void SpawnPlayers()
-    {
-        foreach (PlayerSpawnSettings settings in playerSpawnSettings)
+        if (playerInstance.TryGetComponent(out Player player))
         {
-            if (settings == null)
-                continue;
-            
-             var playerInstance = Spawn(playerPrefab, settings.SpawnPoint);
-            playerInstance.GetComponent<Player>().Init(settings);
-
-            _playerInstances.Add(settings.Identifier, playerInstance);
+            player.Init(settings);
         }
-    }
-
-    public GameObject GetPlayer(string id)
-    {
-        return _playerInstances.TryGetValue(id, out GameObject instance) ? instance : null;
-    }
-
-    public void SpawnBall()
-    {
-        _ballInstance = Spawn(ballPrefab, ballSpawnPoint);
-    }
-
-    internal void SpawnEntities()
-    {
-        SpawnPlayers();
-        SpawnBall();
-    }
-
-    public void Respawn()
-    {
-        foreach(var settings in playerSpawnSettings) {
-            var playerTransfrom = GetPlayer(settings.Identifier).transform;
-            playerTransfrom.position = settings.SpawnPoint.position;
-            playerTransfrom.rotation = settings.SpawnPoint.rotation;
+        else
+        {
+            Debug.LogWarning($"Player prefab is missing {nameof(Player)} component.", playerInstance);
         }
-
-        BallInstance.transform.position = ballSpawnPoint.position;
-        BallInstance.transform.rotation = ballSpawnPoint.rotation;
     }
 }
