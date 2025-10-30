@@ -7,7 +7,7 @@ public class GameSettingsView : View
 {
     [SerializeField] Button restartGameButton;
     [SerializeField] Button exitToMenuButton;
-    private EntitySpawner spawner;
+    private EntitySpawnerBase spawner;
     private AsyncOperation _load;
 
     public override void Init()
@@ -29,14 +29,14 @@ public class GameSettingsView : View
 
         if (!_load.isDone)
             yield return null;
-        
+
         ViewManager.Show<MainMenuView>();
     }
 
     private void OnRestartButtonClicked()
     {
         if (spawner == null)
-            spawner = FindAnyObjectByType<EntitySpawner>();
+            spawner = FindAnyObjectByType<EntitySpawnerBase>();
 
         spawner?.Respawn();
         Hide();
