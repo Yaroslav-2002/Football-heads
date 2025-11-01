@@ -18,9 +18,21 @@ public class NetworkPlayer : NetworkBehaviour, IControllable
 
     private void Start()
     {
-        if (!IsOwner)
+        if (input == null)
         {
-            enabled = false; 
+            return;
+        }
+
+        if (IsOwner)
+        {
+            if (!input.enabled)
+            {
+                input.enabled = true;
+            }
+        }
+        else
+        {
+            input.enabled = false;
         }
     }
 

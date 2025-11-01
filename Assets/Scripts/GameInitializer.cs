@@ -8,7 +8,9 @@ public class GameInitializer : MonoBehaviour
     [SerializeField] private GoalTrigger leftTrigger;
     [SerializeField] private GoalTrigger rightTrigger;
 
-    private EntitySpawnerBase Spawner =>  GameConfiguration.CurrentMode == GameMode.Multiplayer ? multiplayerSpawner : singleplayerSpawner;
+    private EntitySpawnerBase _activeSpawner;
+
+    private EntitySpawnerBase SpawnerPrefab => GameConfiguration.CurrentMode == GameMode.Multiplayer ? multiplayerSpawner : singleplayerSpawner;
 
     private void OnEnable()
     {
@@ -29,13 +31,18 @@ public class GameInitializer : MonoBehaviour
 
     public void InitializeGame()
     {
-        Instantiate(Spawner);
-        Spawner.Init();
+        if (_activeSpawner != null)
+        {
+            return;
+        }
+
+        _activeSpawner = Instantiate(SpawnerPrefab);
+        _activeSpawner.Init();
     }
 
     private void OnGoalScored(TeamSide scoringTeam)
     {
-        Spawner.Respawn();
+        _activeSpawner?.Respawn();
         scoreBoard.UpdateScore(scoringTeam);
     }
 }

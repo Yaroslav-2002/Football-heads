@@ -11,6 +11,14 @@ public class NetworkEntitySpawner : EntitySpawnerBase
         networkManager.OnClientConnectedCallback += OnClientConnected;
     }
 
+    private void OnDisable()
+    {
+        if (networkManager != null)
+        {
+            networkManager.OnClientConnectedCallback -= OnClientConnected;
+        }
+    }
+
     private void OnClientConnected(ulong clientId)
     {
         // Only server/host can spawn networked objects
@@ -19,14 +27,25 @@ public class NetworkEntitySpawner : EntitySpawnerBase
 
         Debug.Log($"Client connected: {clientId}");
 
-        int index = networkManager.ConnectedClientsIds.Count - 1;
+        int index = PlayerInstances.Count;
+        if (index < 0 || index >= playerSpawnSettings.Count)
+        {
+            Debug.LogWarning($"No spawn settings configured for client {clientId}.", this);
+            return;
+        }
 
         var settings = playerSpawnSettings[index];
 
-        GameObject playerInstance = Spawn(playerPrefab, settings.SpawnPoint);
+        GameObject playerInstance = SpawnPlayerForClient(playerPrefab, settings.SpawnPoint, clientId);
+        if (playerInstance == null)
+        {
+            Debug.LogWarning($"Failed to spawn player for client {clientId}.", this);
+            return;
+        }
 
         InitializePlayer(playerInstance, settings);
-        //playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+        CachePlayer(settings.Identifier, playerInstance);
+        OnPlayerSpawned(playerInstance, settings);
     }
 
     protected override void InitializePlayer(GameObject playerInstance, PlayerSpawnSettings settings)
@@ -82,6 +101,18 @@ public class NetworkEntitySpawner : EntitySpawnerBase
         }
     }
 
+    private GameObject SpawnPlayerForClient(GameObject prefab, Transform spawnPoint, ulong clientId)
+    {
+        GameObject instance = base.Spawn(prefab, spawnPoint);
+        if (instance == null)
+        {
+            return null;
+        }
+
+        TrySpawnPlayerObject(instance, clientId);
+        return instance;
+    }
+
     private static void TrySpawnNetworkObject(GameObject instance)
     {
         if (instance == null || !IsServer())
@@ -93,6 +124,24 @@ public class NetworkEntitySpawner : EntitySpawnerBase
         if (!networkObject.IsSpawned)
         {
             networkObject.Spawn();
+        }
+    }
+
+    private static void TrySpawnPlayerObject(GameObject instance, ulong clientId)
+    {
+        if (instance == null || !IsServer())
+            return;
+
+        if (!instance.TryGetComponent(out NetworkObject networkObject))
+            return;
+
+        if (!networkObject.IsSpawned)
+        {
+            networkObject.SpawnAsPlayerObject(clientId);
+        }
+        else
+        {
+            networkObject.ChangeOwnership(clientId);
         }
     }
 
