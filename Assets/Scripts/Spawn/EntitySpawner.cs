@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class EntitySpawner : EntitySpawnerBase
 {
+    public override void Init()
+    {
+        SpawnEntities();
+    }
+
     protected override void InitializePlayer(GameObject playerInstance, PlayerSpawnSettings settings)
     {
         if (playerInstance.TryGetComponent(out Player player))

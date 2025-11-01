@@ -3,11 +3,11 @@ using UnityEngine;
 
 public abstract class EntitySpawnerBase : MonoBehaviour
 {
-    [Header("Player")] [SerializeField] private List<PlayerSpawnSettings> playerSpawnSettings = new();
-    [SerializeField] private GameObject playerPrefab;
+    [Header("Player")] [SerializeField] protected List<PlayerSpawnSettings> playerSpawnSettings = new();
+    [SerializeField] protected GameObject playerPrefab;
 
-    [Header("Ball")] [SerializeField] private GameObject ballPrefab;
-    [SerializeField] private Transform ballSpawnPoint;
+    [Header("Ball")] [SerializeField] protected GameObject ballPrefab;
+    [SerializeField] protected Transform ballSpawnPoint;
 
     private readonly Dictionary<string, GameObject> _playerInstances = new();
     private GameObject _ballInstance;
@@ -19,6 +19,8 @@ public abstract class EntitySpawnerBase : MonoBehaviour
     {
         RemoveNullSettings();
     }
+
+    public abstract void Init();
 
     protected IEnumerable<PlayerSpawnSettings> PlayerSettings => playerSpawnSettings;
 

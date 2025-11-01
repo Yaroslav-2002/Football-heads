@@ -1,8 +1,34 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
 public class NetworkEntitySpawner : EntitySpawnerBase
 {
+    [SerializeField] private NetworkManager networkManager;
+
+    private void OnEnable()
+    {
+        networkManager.OnClientConnectedCallback += OnClientConnected;
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        // Only server/host can spawn networked objects
+        if (!IsServer())
+            return;
+
+        Debug.Log($"Client connected: {clientId}");
+
+        int index = networkManager.ConnectedClientsIds.Count - 1;
+
+        var settings = playerSpawnSettings[index];
+
+        GameObject playerInstance = Spawn(playerPrefab, settings.SpawnPoint);
+
+        InitializePlayer(playerInstance, settings);
+        //playerInstance.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+    }
+
     protected override void InitializePlayer(GameObject playerInstance, PlayerSpawnSettings settings)
     {
         if (playerInstance.TryGetComponent(out NetworkPlayer player))
@@ -13,17 +39,6 @@ public class NetworkEntitySpawner : EntitySpawnerBase
         {
             Debug.LogWarning($"Player prefab is missing {nameof(NetworkPlayer)} component.", playerInstance);
         }
-    }
-
-    public override void SpawnEntities()
-    {
-        if (!IsServer())
-        {
-            Debug.LogWarning("NetworkEntitySpawner.SpawnEntities can only be invoked on the server instance.", this);
-            return;
-        }
-
-        base.SpawnEntities();
     }
 
     public override void Respawn()
@@ -84,5 +99,13 @@ public class NetworkEntitySpawner : EntitySpawnerBase
     private static bool IsServer()
     {
         return NetworkManager.Singleton != null && NetworkManager.Singleton.IsServer;
+    }
+
+    public override void Init()
+    {
+        if (IsServer())
+        {
+            SpawnBall();
+        }
     }
 }

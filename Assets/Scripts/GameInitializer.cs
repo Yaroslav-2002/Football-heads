@@ -2,10 +2,13 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    [SerializeField] private EntitySpawnerBase spawner;
+    [SerializeField] private NetworkEntitySpawner multiplayerSpawner;
+    [SerializeField] private EntitySpawner singleplayerSpawner;
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private GoalTrigger leftTrigger;
     [SerializeField] private GoalTrigger rightTrigger;
+
+    private EntitySpawnerBase Spawner =>  GameConfiguration.CurrentMode == GameMode.Multiplayer ? multiplayerSpawner : singleplayerSpawner;
 
     private void OnEnable()
     {
@@ -26,12 +29,13 @@ public class GameInitializer : MonoBehaviour
 
     public void InitializeGame()
     {
-        spawner.SpawnEntities();
+        Instantiate(Spawner);
+        Spawner.Init();
     }
 
     private void OnGoalScored(TeamSide scoringTeam)
     {
-        spawner.Respawn();
+        Spawner.Respawn();
         scoreBoard.UpdateScore(scoringTeam);
     }
 }

@@ -291,7 +291,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2342043793292390505}
-  - component: {fileID: 1841377160486654761}
   - component: {fileID: 5392653173384048562}
   - component: {fileID: 7657675285055145745}
   - component: {fileID: 8549101775491312785}
@@ -324,21 +323,6 @@ Transform:
   - {fileID: 365737523088186411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1841377160486654761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6757439585877526867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34a7718e602b06a42a7a243267e88d9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boot: {fileID: 6154361316095865010}
-  movement: {fileID: 1405306481578629402}
-  input: {fileID: 8549101775491312785}
 --- !u!50 &5392653173384048562
 Rigidbody2D:
   serializedVersion: 5
@@ -445,7 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3170628298
+  GlobalObjectIdHash: 2750377592
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -471,9 +455,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   ShowTopMostFoldoutHeaderGroup: 1
-  boot: {fileID: 0}
-  movement: {fileID: 0}
-  input: {fileID: 0}
+  boot: {fileID: 6154361316095865010}
+  movement: {fileID: 1405306481578629402}
+  input: {fileID: 8549101775491312785}
 --- !u!114 &6287812621720067864
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PlayerInput))]
-public class NetworkPlayer : NetworkBehaviour
+public class NetworkPlayer : NetworkBehaviour, IControllable
 {
     [SerializeField] private BootSwing boot;
     [SerializeField] private Movement movement;
@@ -12,7 +12,7 @@ public class NetworkPlayer : NetworkBehaviour
 
     private string _id;
     public string Id => _id;
-
+    
     private TeamSide _team;
     public TeamSide Team => _team;
 

@@ -7,6 +7,7 @@ public class MainMenuView : View
     [SerializeField] Button exitButton;
     [SerializeField] Button settingsButton;
     [SerializeField] Button startButton;
+    [SerializeField] Button multiplayerButton;
 
     public override void Init()
     {
@@ -24,10 +25,22 @@ public class MainMenuView : View
         {
             startButton.onClick.AddListener(OnStartButtonClicked);
         }
+
+        if (multiplayerButton != null)
+        {
+            multiplayerButton.onClick.AddListener(OnMultiplayerButtonClicked);
+        }
     }
 
     private void OnStartButtonClicked()
     {
+        GameConfiguration.CurrentMode = GameMode.Singleplayer;
+        SceneManager.LoadSceneAsync(SceneConstants.SCENE_MAIN);
+    }
+
+    private void OnMultiplayerButtonClicked()
+    {
+        GameConfiguration.CurrentMode = GameMode.Multiplayer;
         SceneManager.LoadSceneAsync(SceneConstants.SCENE_MAIN);
     }
 
