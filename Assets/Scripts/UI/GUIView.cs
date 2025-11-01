@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUI : View
+public class GUIView : View
 {
     [SerializeField] Button gameSettingsButton;
 

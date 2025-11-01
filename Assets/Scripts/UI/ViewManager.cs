@@ -71,9 +71,9 @@ public class ViewManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == SceneConstants.SCENE_MAIN)
+        if (scene.name == SceneConstants.SCENE_GAME)
         {
-            Show<GUI>();
+            Show<GUIView>();
         }
     }
 

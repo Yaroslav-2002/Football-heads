@@ -35,13 +35,13 @@ public class MainMenuView : View
     private void OnStartButtonClicked()
     {
         GameConfiguration.CurrentMode = GameMode.Singleplayer;
-        SceneManager.LoadSceneAsync(SceneConstants.SCENE_MAIN);
+        SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }
 
     private void OnMultiplayerButtonClicked()
     {
         GameConfiguration.CurrentMode = GameMode.Multiplayer;
-        SceneManager.LoadSceneAsync(SceneConstants.SCENE_MAIN);
+        SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }
 
     void OnExitButtonClick()
