@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class MultiplayerMenuView : View
 {
@@ -181,6 +182,16 @@ public class MultiplayerMenuView : View
         }
     }
 
+    private void OnEnable()
+    {
+        InputSystem.onTextInput += HandleTextInput;
+    }
+
+    private void OnDisable()
+    {
+        InputSystem.onTextInput -= HandleTextInput;
+    }
+
     private void Update()
     {
         if (!isActiveAndEnabled || isProcessing)
@@ -188,38 +199,47 @@ public class MultiplayerMenuView : View
             return;
         }
 
-        foreach (char rawCharacter in Input.inputString)
+        var keyboard = Keyboard.current;
+        if (keyboard == null)
         {
-            if (rawCharacter == '\b' || rawCharacter == 127)
-            {
-                if (joinCodeBuilder.Length > 0)
-                {
-                    joinCodeBuilder.Length--;
-                    UpdateJoinCodeDisplay();
-                }
-
-                continue;
-            }
-
-            if (char.IsControl(rawCharacter))
-            {
-                continue;
-            }
-
-            char character = char.ToUpperInvariant(rawCharacter);
-            if (!JoinCodeUtility.IsValidCharacter(character))
-            {
-                continue;
-            }
-
-            if (joinCodeBuilder.Length >= maxJoinCodeLength)
-            {
-                continue;
-            }
-
-            joinCodeBuilder.Append(character);
-            UpdateJoinCodeDisplay();
+            return;
         }
+
+        if (keyboard.backspaceKey.wasPressedThisFrame || keyboard.deleteKey.wasPressedThisFrame)
+        {
+            if (joinCodeBuilder.Length > 0)
+            {
+                joinCodeBuilder.Length--;
+                UpdateJoinCodeDisplay();
+            }
+        }
+    }
+
+    private void HandleTextInput(char character, InputDevice device)
+    {
+        if (!isActiveAndEnabled || isProcessing)
+        {
+            return;
+        }
+
+        if (char.IsControl(character))
+        {
+            return;
+        }
+
+        char normalizedCharacter = char.ToUpperInvariant(character);
+        if (!JoinCodeUtility.IsValidCharacter(normalizedCharacter))
+        {
+            return;
+        }
+
+        if (joinCodeBuilder.Length >= maxJoinCodeLength)
+        {
+            return;
+        }
+
+        joinCodeBuilder.Append(normalizedCharacter);
+        UpdateJoinCodeDisplay();
     }
 
     private void OnHostClicked()
