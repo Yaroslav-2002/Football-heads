@@ -10,18 +10,6 @@ public class PlayerSpawnSettings
     [SerializeField] private TeamSide team;
     //Texture
 
-    public PlayerSpawnSettings()
-    {
-    }
-
-    public PlayerSpawnSettings(string id, GameObject prefab, Transform spawnLocation, TeamSide teamSide, PlayerInput.ControlScheme scheme)
-    {
-        identifier = id;
-        spawnPoint = spawnLocation;
-        controlScheme = scheme;
-        team = teamSide;
-    }
-
     public TeamSide Team => team;
     public string Identifier => string.IsNullOrWhiteSpace(identifier) ? controlScheme.ToString() : identifier;
     public Transform SpawnPoint => spawnPoint;

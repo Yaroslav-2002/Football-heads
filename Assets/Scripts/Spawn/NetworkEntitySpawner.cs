@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class NetworkEntitySpawner : EntitySpawnerBase
 {
-    [SerializeField] private NetworkManager networkManager;
+    private NetworkManager _networkManager;
 
-    private void OnEnable()
+    public void SetNetworkManager(NetworkManager networkManager)
     {
-        networkManager.OnClientConnectedCallback += OnClientConnected;
+        if (_networkManager != null)
+            return;
+
+        _networkManager = networkManager;
+        _networkManager.OnClientConnectedCallback += OnClientConnected;
     }
 
     private void OnDisable()
     {
-        if (networkManager != null)
+        if (_networkManager != null)
         {
-            networkManager.OnClientConnectedCallback -= OnClientConnected;
+            _networkManager.OnClientConnectedCallback -= OnClientConnected;
         }
     }
 

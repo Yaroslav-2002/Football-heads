@@ -46,13 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EntitySpawner
   playerSpawnSettings:
   - identifier: 0
-    spawnPoint: {fileID: 0}
+    spawnPoint: {fileID: 7422794014069639034, guid: 45b8d45f3cc6eb24d80be799ffac9683, type: 3}
     controlScheme: 0
     team: 0
   - identifier: 1
-    spawnPoint: {fileID: 0}
+    spawnPoint: {fileID: 6220091479391529682, guid: 42aaa7d7a76369f4d9a5c0b7abc7533e, type: 3}
     controlScheme: 1
     team: 1
   playerPrefab: {fileID: 6757439585877526867, guid: 1af08a5468993874ea7cb71e0d6acffa, type: 3}
   ballPrefab: {fileID: 929542034098923931, guid: 424d3420b7e26684d8e5098158a00966, type: 3}
-  ballSpawnPoint: {fileID: 0}
+  ballSpawnPoint: {fileID: 350163117964112090, guid: 5403cf820311cca4c8c95e28eb08b5e0, type: 3}

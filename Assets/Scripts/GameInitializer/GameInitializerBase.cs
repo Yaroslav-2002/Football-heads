@@ -1,14 +1,13 @@
 using UnityEngine;
 
-public class GameInitializer : MonoBehaviour
+public abstract class GameInitializerBase : MonoBehaviour
 {
-    [SerializeField] private NetworkEntitySpawner multiplayerSpawner;
-    [SerializeField] private EntitySpawner singleplayerSpawner;
+    [SerializeField] private EntitySpawnerBase spawnerPrefab;
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private GoalTrigger leftTrigger;
     [SerializeField] private GoalTrigger rightTrigger;
 
-    private EntitySpawnerBase SpawnerPrefab => GameConfiguration.CurrentMode == GameMode.Multiplayer ? multiplayerSpawner : singleplayerSpawner;
+    private EntitySpawnerBase SpawnerPrefab;
 
     private void OnEnable()
     {
@@ -29,10 +28,9 @@ public class GameInitializer : MonoBehaviour
 
     public void InitializeGame()
     {
-        if (SpawnerPrefab != null)
-        {
-            return;
-        }
+        Debug.Log($"Game type :{GameConfiguration.CurrentMode}");
+
+        SpawnerPrefab = Instantiate(spawnerPrefab);
 
         SpawnerPrefab.Init();
     }
