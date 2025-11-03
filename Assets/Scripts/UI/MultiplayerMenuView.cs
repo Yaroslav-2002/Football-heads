@@ -58,16 +58,6 @@ public class MultiplayerMenuView : View
         }
     }
 
-    private void OnEnable()
-    {
-        InputSystem.onTextInput += HandleTextInput;
-    }
-
-    private void OnDisable()
-    {
-        InputSystem.onTextInput -= HandleTextInput;
-    }
-
     private void Update()
     {
         if (!isActiveAndEnabled || isProcessing)
@@ -89,9 +79,27 @@ public class MultiplayerMenuView : View
                 UpdateJoinCodeDisplay();
             }
         }
+
+        ProcessCharacterKeys(keyboard);
     }
 
-    private void HandleTextInput(char character, InputDevice device)
+    private void ProcessCharacterKeys(Keyboard keyboard)
+    {
+        foreach (var keyControl in keyboard.allKeys)
+        {
+            if (!keyControl.wasPressedThisFrame)
+            {
+                continue;
+            }
+
+            if (TryGetCharacterForKey(keyControl.keyCode, out var character))
+            {
+                HandleCharacterInput(character);
+            }
+        }
+    }
+
+    private void HandleCharacterInput(char character)
     {
         if (!isActiveAndEnabled || isProcessing)
         {
@@ -116,6 +124,82 @@ public class MultiplayerMenuView : View
 
         joinCodeBuilder.Append(normalizedCharacter);
         UpdateJoinCodeDisplay();
+    }
+
+    private static bool TryGetCharacterForKey(Key keyCode, out char character)
+    {
+        switch (keyCode)
+        {
+            case Key.A: character = 'A'; return true;
+            case Key.B: character = 'B'; return true;
+            case Key.C: character = 'C'; return true;
+            case Key.D: character = 'D'; return true;
+            case Key.E: character = 'E'; return true;
+            case Key.F: character = 'F'; return true;
+            case Key.G: character = 'G'; return true;
+            case Key.H: character = 'H'; return true;
+            case Key.I: character = 'I'; return true;
+            case Key.J: character = 'J'; return true;
+            case Key.K: character = 'K'; return true;
+            case Key.L: character = 'L'; return true;
+            case Key.M: character = 'M'; return true;
+            case Key.N: character = 'N'; return true;
+            case Key.O: character = 'O'; return true;
+            case Key.P: character = 'P'; return true;
+            case Key.Q: character = 'Q'; return true;
+            case Key.R: character = 'R'; return true;
+            case Key.S: character = 'S'; return true;
+            case Key.T: character = 'T'; return true;
+            case Key.U: character = 'U'; return true;
+            case Key.V: character = 'V'; return true;
+            case Key.W: character = 'W'; return true;
+            case Key.X: character = 'X'; return true;
+            case Key.Y: character = 'Y'; return true;
+            case Key.Z: character = 'Z'; return true;
+            case Key.Digit0:
+            case Key.Numpad0:
+                character = '0';
+                return true;
+            case Key.Digit1:
+            case Key.Numpad1:
+                character = '1';
+                return true;
+            case Key.Digit2:
+            case Key.Numpad2:
+                character = '2';
+                return true;
+            case Key.Digit3:
+            case Key.Numpad3:
+                character = '3';
+                return true;
+            case Key.Digit4:
+            case Key.Numpad4:
+                character = '4';
+                return true;
+            case Key.Digit5:
+            case Key.Numpad5:
+                character = '5';
+                return true;
+            case Key.Digit6:
+            case Key.Numpad6:
+                character = '6';
+                return true;
+            case Key.Digit7:
+            case Key.Numpad7:
+                character = '7';
+                return true;
+            case Key.Digit8:
+            case Key.Numpad8:
+                character = '8';
+                return true;
+            case Key.Digit9:
+            case Key.Numpad9:
+                character = '9';
+                return true;
+            default:
+                character = default;
+                return false;
+        }
     }
 
     private void OnHostClicked()
