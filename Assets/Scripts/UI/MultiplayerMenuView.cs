@@ -21,7 +21,6 @@ public class MultiplayerMenuView : View
 
     public override void Init()
     {
-        EnsureRuntimeUI();
 
         if (hostButton != null)
         {
@@ -45,129 +44,6 @@ public class MultiplayerMenuView : View
 
         UpdateJoinCodeDisplay();
         UpdateStatus(string.Empty);
-    }
-
-    private void EnsureRuntimeUI()
-    {
-        if (hostButton != null && joinButton != null && clearButton != null && backButton != null &&
-            joinCodeDisplay != null && statusLabel != null && hostCodeLabel != null)
-        {
-            return;
-        }
-
-        var rectTransform = GetComponent<RectTransform>();
-        if (rectTransform == null)
-        {
-            rectTransform = gameObject.AddComponent<RectTransform>();
-        }
-
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-        rectTransform.sizeDelta = new Vector2(960f, 640f);
-        rectTransform.anchoredPosition = Vector2.zero;
-
-        if (GetComponent<CanvasRenderer>() == null)
-        {
-            gameObject.AddComponent<CanvasRenderer>();
-        }
-
-        var background = GetComponent<Image>();
-        if (background == null)
-        {
-            background = gameObject.AddComponent<Image>();
-        }
-
-        background.color = new Color(0f, 0f, 0f, 0.75f);
-
-        CreateTitle();
-
-        hostButton = CreateButton("HostButton", new Vector2(0f, 200f), "HOST GAME");
-        joinButton = CreateButton("JoinButton", new Vector2(0f, 60f), "JOIN GAME");
-        clearButton = CreateButton("ClearButton", new Vector2(0f, -80f), "CLEAR CODE");
-        backButton = CreateButton("BackButton", new Vector2(0f, -220f), "BACK");
-
-        joinCodeDisplay = CreateLabel("JoinCodeDisplay", new Vector2(0f, -20f), 48f, TextAlignmentOptions.Midline);
-        hostCodeLabel = CreateLabel("HostCodeLabel", new Vector2(0f, 300f), 40f, TextAlignmentOptions.Midline);
-        statusLabel = CreateLabel("StatusLabel", new Vector2(0f, -320f), 36f, TextAlignmentOptions.Midline);
-        statusLabel.color = new Color32(255, 255, 255, 200);
-
-        joinCodeDisplay.text = "Enter join code";
-        hostCodeLabel.text = string.Empty;
-        statusLabel.text = string.Empty;
-    }
-
-    private void CreateTitle()
-    {
-        var title = CreateLabel("Title", new Vector2(0f, 300f), 72f, TextAlignmentOptions.Midline);
-        title.text = "MULTIPLAYER";
-        title.color = new Color32(255, 255, 255, 255);
-    }
-
-    private Button CreateButton(string name, Vector2 anchoredPosition, string label)
-    {
-        var buttonObject = new GameObject(name);
-        buttonObject.transform.SetParent(transform, false);
-
-        var rectTransform = buttonObject.AddComponent<RectTransform>();
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-        rectTransform.sizeDelta = new Vector2(520f, 110f);
-        rectTransform.anchoredPosition = anchoredPosition;
-
-        buttonObject.AddComponent<CanvasRenderer>();
-        var image = buttonObject.AddComponent<Image>();
-        image.sprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
-        image.type = Image.Type.Sliced;
-        image.color = Color.white;
-
-        var button = buttonObject.AddComponent<Button>();
-        button.targetGraphic = image;
-
-        var textComponent = CreateTextChild(buttonObject, label, 56f);
-        textComponent.color = new Color32(50, 50, 50, 255);
-
-        return button;
-    }
-
-    private TextMeshProUGUI CreateLabel(string name, Vector2 anchoredPosition, float fontSize, TextAlignmentOptions alignment)
-    {
-        var labelObject = new GameObject(name);
-        labelObject.transform.SetParent(transform, false);
-
-        var rectTransform = labelObject.AddComponent<RectTransform>();
-        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-        rectTransform.sizeDelta = new Vector2(800f, 100f);
-        rectTransform.anchoredPosition = anchoredPosition;
-
-        labelObject.AddComponent<CanvasRenderer>();
-        return CreateTextComponent(labelObject, string.Empty, fontSize, alignment);
-    }
-
-    private TextMeshProUGUI CreateTextChild(GameObject parent, string label, float fontSize)
-    {
-        var child = new GameObject("Label");
-        child.transform.SetParent(parent.transform, false);
-
-        var rectTransform = child.AddComponent<RectTransform>();
-        rectTransform.anchorMin = Vector2.zero;
-        rectTransform.anchorMax = Vector2.one;
-        rectTransform.sizeDelta = Vector2.zero;
-
-        child.AddComponent<CanvasRenderer>();
-        return CreateTextComponent(child, label, fontSize, TextAlignmentOptions.Midline);
-    }
-
-    private TextMeshProUGUI CreateTextComponent(GameObject owner, string content, float fontSize, TextAlignmentOptions alignment)
-    {
-        var text = owner.AddComponent<TextMeshProUGUI>();
-        text.text = content;
-        text.fontSize = fontSize;
-        text.alignment = alignment;
-        text.enableWordWrapping = false;
-        text.font = TMP_Settings.defaultFontAsset;
-        text.color = new Color32(50, 50, 50, 255);
-        return text;
     }
 
     public override void Show()

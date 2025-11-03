@@ -7,8 +7,7 @@ public class MainMenuView : View
     [SerializeField] Button exitButton;
     [SerializeField] Button settingsButton;
     [SerializeField] Button startButton;
-    [SerializeField] Button hostButton;
-    [SerializeField] Button joinButton;
+    [SerializeField] Button multiplayerButton;
 
     public override void Init()
     {
