@@ -41,8 +41,7 @@ public class MainMenuView : View
 
     private void OnMultiplayerButtonClicked()
     {
-        GameConfiguration.CurrentMode = GameMode.Multiplayer;
-        SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
+        ViewManager.Show<MultiplayerMenuView>();
     }
 
     void OnExitButtonClick()
