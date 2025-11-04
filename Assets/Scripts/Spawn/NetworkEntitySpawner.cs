@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 public class NetworkEntitySpawner : EntitySpawnerBase
 {
     private NetworkManager _networkManager;
+    [SerializeField] private int requiredPlayersToStartMatch = 2;
+    [SerializeField] private float ballSpawnDelaySeconds = 2f;
+    private Coroutine _ballSpawnCoroutine;
 
     public void SetNetworkManager(NetworkManager networkManager)
     {
@@ -20,6 +24,12 @@ public class NetworkEntitySpawner : EntitySpawnerBase
         if (_networkManager != null)
         {
             _networkManager.OnClientConnectedCallback -= OnClientConnected;
+        }
+
+        if (_ballSpawnCoroutine != null)
+        {
+            StopCoroutine(_ballSpawnCoroutine);
+            _ballSpawnCoroutine = null;
         }
     }
 
@@ -50,6 +60,8 @@ public class NetworkEntitySpawner : EntitySpawnerBase
         InitializePlayer(playerInstance, settings);
         CachePlayer(settings.Identifier, playerInstance);
         OnPlayerSpawned(playerInstance, settings);
+
+        TryScheduleBallSpawn();
     }
 
     protected override void InitializePlayer(GameObject playerInstance, PlayerSpawnSettings settings)
@@ -156,9 +168,59 @@ public class NetworkEntitySpawner : EntitySpawnerBase
 
     public override void Init()
     {
-        if (IsServer())
+        if (!IsServer())
+            return;
+
+        TryScheduleBallSpawn();
+    }
+
+    private void TryScheduleBallSpawn()
+    {
+        if (!IsServer())
+            return;
+
+        if (_ballSpawnCoroutine != null || BallInstance != null)
+            return;
+
+        int playersNeeded = GetPlayersNeededToStartMatch();
+        if (playersNeeded <= 0)
+            return;
+
+        if (PlayerInstances.Count < playersNeeded)
+            return;
+
+        _ballSpawnCoroutine = StartCoroutine(SpawnBallAfterDelay());
+    }
+
+    private IEnumerator SpawnBallAfterDelay()
+    {
+        float delay = Mathf.Max(0f, ballSpawnDelaySeconds);
+        if (delay > 0f)
         {
-            SpawnBall();
+            yield return new WaitForSeconds(delay);
         }
+
+        _ballSpawnCoroutine = null;
+
+        if (!IsServer())
+            yield break;
+
+        int playersNeeded = GetPlayersNeededToStartMatch();
+        if (playersNeeded > 0 && PlayerInstances.Count < playersNeeded)
+            yield break;
+
+        SpawnBall();
+    }
+
+    private int GetPlayersNeededToStartMatch()
+    {
+        int maxPlayers = playerSpawnSettings.Count;
+        if (maxPlayers <= 0)
+            return 0;
+
+        if (requiredPlayersToStartMatch <= 0)
+            return maxPlayers;
+
+        return Mathf.Min(requiredPlayersToStartMatch, maxPlayers);
     }
 }
