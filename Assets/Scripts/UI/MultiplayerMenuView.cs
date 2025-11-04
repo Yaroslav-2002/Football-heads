@@ -9,14 +9,11 @@ public class MultiplayerMenuView : View
 {
     [SerializeField] private Button hostButton;
     [SerializeField] private Button joinButton;
-    [SerializeField] private Button clearButton;
     [SerializeField] private Button backButton;
-    [SerializeField] private TextMeshProUGUI joinCodeDisplay;
+    [SerializeField] private TMP_InputField joinCodeInputField;
     [SerializeField] private TextMeshProUGUI statusLabel;
     [SerializeField] private TextMeshProUGUI hostCodeLabel;
-    [SerializeField] private int maxJoinCodeLength = 12;
 
-    private readonly StringBuilder joinCodeBuilder = new();
     private bool isProcessing;
 
     public override void Init()
@@ -32,17 +29,11 @@ public class MultiplayerMenuView : View
             joinButton.onClick.AddListener(OnJoinClicked);
         }
 
-        if (clearButton != null)
-        {
-            clearButton.onClick.AddListener(ClearJoinCode);
-        }
-
         if (backButton != null)
         {
             backButton.onClick.AddListener(OnBackClicked);
         }
 
-        UpdateJoinCodeDisplay();
         UpdateStatus(string.Empty);
     }
 
@@ -50,8 +41,7 @@ public class MultiplayerMenuView : View
     {
         base.Show();
         isProcessing = false;
-        ClearJoinCode();
-        UpdateStatus(string.Empty);
+
         if (hostCodeLabel != null)
         {
             hostCodeLabel.text = string.Empty;
@@ -91,14 +81,24 @@ public class MultiplayerMenuView : View
             return;
         }
 
-        if (!JoinCodeUtility.TryParseJoinCode(joinCodeBuilder.ToString(), out var address, out var port))
+        var joinCodeText = joinCodeInputField != null ? joinCodeInputField.text : string.Empty;
+        var joinCode = string.IsNullOrWhiteSpace(joinCodeText)
+            ? string.Empty
+            : joinCodeText.Trim().ToUpperInvariant();
+
+        if (joinCodeInputField != null && joinCodeInputField.text != joinCode)
+        {
+            joinCodeInputField.text = joinCode;
+        }
+
+        if (!JoinCodeUtility.TryParseJoinCode(joinCode, out var address, out var port))
         {
             UpdateStatus("Invalid join code. Use letters A-Z and numbers 2-9.");
             return;
         }
 
         isProcessing = true;
-        GameConfiguration.ConfigureClient(joinCodeBuilder.ToString());
+        GameConfiguration.ConfigureClient(joinCode);
         UpdateStatus($"Joining {address}:{port}...");
         SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }
@@ -111,23 +111,6 @@ public class MultiplayerMenuView : View
         }
 
         ViewManager.ShowLast();
-    }
-
-    private void ClearJoinCode()
-    {
-        joinCodeBuilder.Clear();
-        UpdateJoinCodeDisplay();
-        UpdateStatus(string.Empty);
-    }
-
-    private void UpdateJoinCodeDisplay()
-    {
-        if (joinCodeDisplay == null)
-        {
-            return;
-        }
-
-        joinCodeDisplay.text = joinCodeBuilder.Length == 0 ? "Enter join code" : joinCodeBuilder.ToString();
     }
 
     private void UpdateStatus(string message)
