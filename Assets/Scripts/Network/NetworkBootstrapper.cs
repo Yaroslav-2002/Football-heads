@@ -6,7 +6,6 @@ using UnityEngine;
 public class NetworkBootstrapper : MonoBehaviour
 {
     [SerializeField] private NetworkManager networkManager;
-    [SerializeField] private GameConfiguration configuration;
 
     private void Awake()
     {
@@ -24,53 +23,47 @@ public class NetworkBootstrapper : MonoBehaviour
             return;
         }
 
-        if (configuration == null)
-        {
-            Debug.LogError("NetworkBootstrapper requires a GameConfiguration asset.", this);
-            return;
-        }
-
-        if (configuration.CurrentMode != GameMode.Multiplayer)
+        if (GameConfiguration.CurrentMode != GameMode.Multiplayer)
         {
             return;
         }
 
         var transport = networkManager.NetworkConfig?.NetworkTransport as UnityTransport;
 
-        if (configuration.ShouldStartHost)
+        if (GameConfiguration.ShouldStartHost)
         {
             ApplyHostTransportSettings(transport);
             if (!networkManager.StartHost())
             {
                 Debug.LogError("Failed to start host session.", this);
             }
-            else if (!string.IsNullOrEmpty(configuration.HostJoinCode))
+            else if (!string.IsNullOrEmpty(GameConfiguration.HostJoinCode))
             {
-                if (JoinCodeUtility.TryParseJoinCode(configuration.HostJoinCode, out var shareAddress, out var sharePort))
+                if (JoinCodeUtility.TryParseJoinCode(GameConfiguration.HostJoinCode, out var shareAddress, out var sharePort))
                 {
-                    Debug.Log($"Hosting session at {shareAddress}:{sharePort}. Join code: {configuration.HostJoinCode}");
+                    Debug.Log($"Hosting session at {shareAddress}:{sharePort}. Join code: {GameConfiguration.HostJoinCode}");
                 }
                 else
                 {
-                    Debug.Log($"Hosting session. Join code: {configuration.HostJoinCode}");
+                    Debug.Log($"Hosting session. Join code: {GameConfiguration.HostJoinCode}");
                 }
             }
 
-            configuration.ResetNetworkConfiguration();
+            GameConfiguration.ResetNetworkConfiguration();
         }
-        else if (configuration.ShouldStartClient)
+        else if (GameConfiguration.ShouldStartClient)
         {
             if (transport == null)
             {
                 Debug.LogError("Unable to configure client transport.", this);
-                configuration.ResetNetworkConfiguration();
+                GameConfiguration.ResetNetworkConfiguration();
                 return;
             }
 
-            if (!JoinCodeUtility.TryParseJoinCode(configuration.ClientJoinCode, out var address, out var port))
+            if (!JoinCodeUtility.TryParseJoinCode(GameConfiguration.ClientJoinCode, out var address, out var port))
             {
                 Debug.LogError("Provided join code is invalid.", this);
-                configuration.ResetNetworkConfiguration();
+                GameConfiguration.ResetNetworkConfiguration();
                 return;
             }
 
@@ -80,7 +73,7 @@ public class NetworkBootstrapper : MonoBehaviour
                 Debug.LogError("Failed to start client using provided join code.", this);
             }
 
-            configuration.ResetNetworkConfiguration();
+            GameConfiguration.ResetNetworkConfiguration();
         }
     }
 
@@ -91,7 +84,7 @@ public class NetworkBootstrapper : MonoBehaviour
             return;
         }
 
-        transport.SetConnectionData(configuration.HostAddress, configuration.HostPort, configuration.HostAddress);
+        transport.SetConnectionData(GameConfiguration.HostAddress, GameConfiguration.HostPort, GameConfiguration.HostAddress);
     }
 }
 

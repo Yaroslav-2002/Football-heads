@@ -8,7 +8,6 @@ public class MainMenuView : View
     [SerializeField] Button settingsButton;
     [SerializeField] Button startButton;
     [SerializeField] Button multiplayerButton;
-    [SerializeField] private GameConfiguration configuration;
 
     public override void Init()
     {
@@ -35,14 +34,7 @@ public class MainMenuView : View
 
     private void OnStartButtonClicked()
     {
-        if (configuration == null)
-        {
-            Debug.LogError("MainMenuView requires a GameConfiguration asset.", this);
-            return;
-        }
-
-        configuration.SetGameMode(GameMode.Singleplayer);
-        configuration.ResetNetworkConfiguration();
+        GameConfiguration.CurrentMode = GameMode.Singleplayer;
         SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }
 
