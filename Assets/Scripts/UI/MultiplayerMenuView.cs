@@ -13,6 +13,7 @@ public class MultiplayerMenuView : View
     [SerializeField] private TMP_InputField joinCodeInputField;
     [SerializeField] private TextMeshProUGUI statusLabel;
     [SerializeField] private TextMeshProUGUI hostCodeLabel;
+    [SerializeField] private GameConfiguration configuration;
 
     private bool isProcessing;
 
@@ -62,8 +63,15 @@ public class MultiplayerMenuView : View
             localAddress = "127.0.0.1";
         }
 
-        var joinCode = JoinCodeUtility.GenerateJoinCode(localAddress, GameConfiguration.HostPort);
-        GameConfiguration.ConfigureHost("0.0.0.0", GameConfiguration.HostPort, joinCode);
+        if (configuration == null)
+        {
+            Debug.LogError("MultiplayerMenuView requires a GameConfiguration asset.", this);
+            isProcessing = false;
+            return;
+        }
+
+        var joinCode = JoinCodeUtility.GenerateJoinCode(localAddress, configuration.HostPort);
+        configuration.ConfigureHost("0.0.0.0", configuration.HostPort, joinCode);
 
         if (hostCodeLabel != null)
         {
@@ -98,7 +106,14 @@ public class MultiplayerMenuView : View
         }
 
         isProcessing = true;
-        GameConfiguration.ConfigureClient(joinCode);
+        if (configuration == null)
+        {
+            Debug.LogError("MultiplayerMenuView requires a GameConfiguration asset.", this);
+            isProcessing = false;
+            return;
+        }
+
+        configuration.ConfigureClient(joinCode);
         UpdateStatus($"Joining {address}:{port}...");
         SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }

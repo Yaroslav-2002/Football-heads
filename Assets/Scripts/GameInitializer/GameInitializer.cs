@@ -9,6 +9,7 @@ public class GameInitializer : MonoBehaviour
     [SerializeField] private GoalTrigger leftTrigger;
     [SerializeField] private GoalTrigger rightTrigger;
     [SerializeField] private NetworkManager networkManager;
+    [SerializeField] private GameConfiguration configuration;
 
     private EntitySpawnerBase _spawner;
     private NetworkManager _networkManager;
@@ -32,9 +33,15 @@ public class GameInitializer : MonoBehaviour
 
     public void InitializeGame()
     {
-        Debug.Log($"Game type :{GameConfiguration.CurrentMode}");
+        if (configuration == null)
+        {
+            Debug.LogError("GameInitializer requires a GameConfiguration asset.", this);
+            return;
+        }
 
-        switch (GameConfiguration.CurrentMode)
+        Debug.Log($"Game type :{configuration.CurrentMode}");
+
+        switch (configuration.CurrentMode)
         {
             case GameMode.Singleplayer:
                 _spawner = Instantiate(localSpawner);

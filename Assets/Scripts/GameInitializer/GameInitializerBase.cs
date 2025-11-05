@@ -6,6 +6,7 @@ public abstract class GameInitializerBase : MonoBehaviour
     [SerializeField] private ScoreBoard scoreBoard;
     [SerializeField] private GoalTrigger leftTrigger;
     [SerializeField] private GoalTrigger rightTrigger;
+    [SerializeField] private GameConfiguration configuration;
 
     private EntitySpawnerBase SpawnerPrefab;
 
@@ -28,7 +29,13 @@ public abstract class GameInitializerBase : MonoBehaviour
 
     public void InitializeGame()
     {
-        Debug.Log($"Game type :{GameConfiguration.CurrentMode}");
+        if (configuration == null)
+        {
+            Debug.LogError("GameInitializerBase requires a GameConfiguration asset.", this);
+            return;
+        }
+
+        Debug.Log($"Game type :{configuration.CurrentMode}");
 
         SpawnerPrefab = Instantiate(spawnerPrefab);
 
