@@ -1,44 +1,59 @@
-public static class GameConfiguration
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "GameConfiguration", menuName = "Configuration/Game Configuration")]
+public class GameConfiguration : ScriptableObject
 {
-    public static GameMode CurrentMode { get; set; } = GameMode.Singleplayer;
+    [SerializeField] private GameMode currentMode = GameMode.Singleplayer;
+    [SerializeField] private string hostAddress = "0.0.0.0";
+    [SerializeField] [Min(0)] private int hostPort = 7777;
+    [SerializeField] private string hostJoinCode = string.Empty;
+    [SerializeField] private string clientJoinCode = string.Empty;
+    [SerializeField] private bool shouldStartHost;
+    [SerializeField] private bool shouldStartClient;
 
-    public static bool ShouldStartHost { get; private set; }
+    public GameMode CurrentMode => currentMode;
+    public bool ShouldStartHost => shouldStartHost;
+    public bool ShouldStartClient => shouldStartClient;
+    public string HostAddress => hostAddress;
+    public ushort HostPort => (ushort)Mathf.Clamp(hostPort, 0, ushort.MaxValue);
+    public string HostJoinCode => hostJoinCode;
+    public string ClientJoinCode => clientJoinCode;
 
-    public static bool ShouldStartClient { get; private set; }
-
-    public static string HostAddress { get; private set; } = "0.0.0.0";
-
-    public static ushort HostPort { get; private set; } = 7777;
-
-    public static string HostJoinCode { get; private set; } = string.Empty;
-
-    public static string ClientJoinCode { get; private set; } = string.Empty;
-
-    public static void ConfigureHost(string listenAddress, ushort port, string joinCode)
+    public void SetGameMode(GameMode mode)
     {
-        CurrentMode = GameMode.Multiplayer;
-        HostAddress = listenAddress;
-        HostPort = port;
-        HostJoinCode = joinCode;
-        ShouldStartHost = true;
-        ShouldStartClient = false;
-        ClientJoinCode = string.Empty;
+        currentMode = mode;
     }
 
-    public static void ConfigureClient(string joinCode)
+    public void ConfigureHost(string listenAddress, ushort port, string joinCode)
     {
-        CurrentMode = GameMode.Multiplayer;
-        ClientJoinCode = joinCode;
-        ShouldStartClient = true;
-        ShouldStartHost = false;
+        currentMode = GameMode.Multiplayer;
+        hostAddress = listenAddress;
+        hostPort = Mathf.Clamp(port, 0, ushort.MaxValue);
+        hostJoinCode = joinCode;
+        shouldStartHost = true;
+        shouldStartClient = false;
+        clientJoinCode = string.Empty;
     }
 
-    public static void ResetNetworkConfiguration()
+    public void ConfigureClient(string joinCode)
     {
-        ShouldStartHost = false;
-        ShouldStartClient = false;
-        HostJoinCode = string.Empty;
-        ClientJoinCode = string.Empty;
+        currentMode = GameMode.Multiplayer;
+        clientJoinCode = joinCode;
+        shouldStartClient = true;
+        shouldStartHost = false;
+    }
+
+    public void ResetNetworkConfiguration()
+    {
+        shouldStartHost = false;
+        shouldStartClient = false;
+        hostJoinCode = string.Empty;
+        clientJoinCode = string.Empty;
+    }
+
+    private void OnValidate()
+    {
+        hostPort = Mathf.Clamp(hostPort, 0, ushort.MaxValue);
     }
 }
 
