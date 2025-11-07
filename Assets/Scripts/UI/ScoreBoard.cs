@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ScoreBoard : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI scoreLeft;
-    [SerializeField] TextMeshProUGUI scoreRight;
+    [SerializeField] TextMeshProUGUI _scoreText;
+    [SerializeField] private GoalManager goalManager;
 
     private int _playerLeftPoints;
     private int _playerRightPoints;
@@ -16,13 +16,23 @@ public class ScoreBoard : MonoBehaviour
         _playerRightPoints = 0;
     }
 
-    public void SetScore(int scoreLeftPoints, int scoreRightPoints)
+    private void OnEnable()
     {
-        scoreLeft.text = scoreLeftPoints.ToString();
-        scoreRight.text = scoreRightPoints.ToString();
+        goalManager.GoalScored += OnGoalScored;
     }
 
-    internal void UpdateScore(TeamSide scoringTeam)
+    private void OnDisable()
+    {
+        goalManager.GoalScored -= OnGoalScored;
+    }
+
+    public void SetScore(int scoreLeftPoints, int scoreRightPoints)
+    {
+        string scoreText = $"{scoreLeftPoints}:{scoreRightPoints}";
+        _scoreText.text = scoreText;
+    }
+
+    internal void OnGoalScored(TeamSide scoringTeam)
     {
         switch (scoringTeam)
         {

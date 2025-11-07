@@ -56,3 +56,4 @@ MonoBehaviour:
   playerPrefab: {fileID: 6757439585877526867, guid: 1af08a5468993874ea7cb71e0d6acffa, type: 3}
   ballPrefab: {fileID: 929542034098923931, guid: 424d3420b7e26684d8e5098158a00966, type: 3}
   ballSpawnPoint: {fileID: 350163117964112090, guid: 5403cf820311cca4c8c95e28eb08b5e0, type: 3}
+  ballRespawnForce: 10

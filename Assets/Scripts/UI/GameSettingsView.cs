@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -5,10 +6,11 @@ using UnityEngine.UI;
 
 public class GameSettingsView : View
 {
-    [SerializeField] Button restartGameButton;
-    [SerializeField] Button exitToMenuButton;
-    private EntitySpawnerBase spawner;
+    [SerializeField] private Button restartGameButton;
+    [SerializeField] private Button exitToMenuButton;
     private AsyncOperation _load;
+
+    public Action OnRestart;
 
     public override void Init()
     {
@@ -35,10 +37,7 @@ public class GameSettingsView : View
 
     private void OnRestartButtonClicked()
     {
-        if (spawner == null)
-            spawner = FindAnyObjectByType<EntitySpawnerBase>();
-
-        spawner?.Respawn();
-        Hide();
+        OnRestart.Invoke();
+        ViewManager.Show<GUIView>();
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class StartScreenController : MonoBehaviour
 {
-    [SerializeField] ViewManager viewManager;
     [SerializeField] TextMeshProUGUI text;
 
     private AsyncOperation _load;
@@ -17,8 +16,6 @@ public class StartScreenController : MonoBehaviour
 
     private IEnumerator Start()
     {
-        Instantiate(viewManager);
-
         _load = SceneManager.LoadSceneAsync(SceneConstants.SCENE_MENU, LoadSceneMode.Single);
 
         if (!_load.isDone)

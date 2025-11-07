@@ -8,9 +8,9 @@ public abstract class EntitySpawnerBase : MonoBehaviour
 
     [Header("Ball")] [SerializeField] protected GameObject ballPrefab;
     [SerializeField] protected Transform ballSpawnPoint;
+    private GameObject _ballInstance;
 
     private readonly Dictionary<string, GameObject> _playerInstances = new();
-    private GameObject _ballInstance;
 
     public IReadOnlyDictionary<string, GameObject> PlayerInstances => _playerInstances;
     public GameObject BallInstance => _ballInstance;
@@ -59,7 +59,7 @@ public abstract class EntitySpawnerBase : MonoBehaviour
         return _playerInstances.TryGetValue(id, out GameObject instance) ? instance : null;
     }
 
-    public virtual void Respawn()
+    public virtual void Respawn(TeamSide scoringTeam = TeamSide.None)
     {
         foreach (PlayerSpawnSettings settings in playerSpawnSettings)
         {
@@ -76,7 +76,7 @@ public abstract class EntitySpawnerBase : MonoBehaviour
         if (_ballInstance != null)
         {
             ApplyTransform(_ballInstance.transform, ballSpawnPoint);
-            OnBallRespawned(_ballInstance);
+            OnBallRespawned(_ballInstance, scoringTeam);
         }
     }
 
@@ -146,7 +146,10 @@ public abstract class EntitySpawnerBase : MonoBehaviour
 
     protected virtual void OnPlayerRespawned(GameObject playerInstance, PlayerSpawnSettings settings) { }
 
-    protected virtual void OnBallRespawned(GameObject ballInstance) { }
+    protected virtual void OnBallRespawned(GameObject ballInstance, TeamSide teamSide = TeamSide.None) 
+    {
+        _ballInstance.GetComponent<Ball>().Respawn(teamSide);
+    }
 
     protected abstract void InitializePlayer(GameObject playerInstance, PlayerSpawnSettings settings);
 }

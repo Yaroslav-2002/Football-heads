@@ -472,6 +472,7 @@ GameObject:
   - component: {fileID: 8409296865731808215}
   - component: {fileID: 3390241410065929038}
   - component: {fileID: 5693387055224118744}
+  - component: {fileID: 1948811398623353256}
   - component: {fileID: 7513120634429530060}
   m_Layer: 0
   m_Name: GoalLeft
@@ -599,6 +600,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 2.3464}
   m_EdgeRadius: 0
+--- !u!114 &1948811398623353256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067529410130571876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a77d7d4bcd29064499f88a9c0e18a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoalTrigger
+  scoringTeam: 1
 --- !u!50 &7513120634429530060
 Rigidbody2D:
   serializedVersion: 5
@@ -637,6 +651,7 @@ GameObject:
   - component: {fileID: 2589652348570782362}
   - component: {fileID: 9015438105040941371}
   - component: {fileID: 8139465710273475054}
+  - component: {fileID: 8468375662108856746}
   - component: {fileID: 5039891173904617085}
   m_Layer: 0
   m_Name: GoalRight
@@ -764,6 +779,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 2.3464}
   m_EdgeRadius: 0
+--- !u!114 &8468375662108856746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8161802027043587678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a77d7d4bcd29064499f88a9c0e18a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoalTrigger
+  scoringTeam: 0
 --- !u!50 &5039891173904617085
 Rigidbody2D:
   serializedVersion: 5

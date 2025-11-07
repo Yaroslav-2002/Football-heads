@@ -1,36 +1,24 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class GameInitializer : MonoBehaviour
+public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private NetworkEntitySpawner networkSpawner;
     [SerializeField] private EntitySpawner localSpawner;
-    [SerializeField] private ScoreBoard scoreBoard;
-    [SerializeField] private GoalTrigger leftTrigger;
-    [SerializeField] private GoalTrigger rightTrigger;
     [SerializeField] private NetworkManager networkManager;
+    [SerializeField] private GoalManager goalManager;
+    [SerializeField] private GameSettingsView gameSettingsView;
 
     private EntitySpawnerBase _spawner;
     private NetworkManager _networkManager;
 
-    private void OnEnable()
-    {
-        leftTrigger.OnGoalScored += OnGoalScored;
-        rightTrigger.OnGoalScored += OnGoalScored;
-    }
-
-    private void OnDisable()
-    {
-        leftTrigger.OnGoalScored -= OnGoalScored;
-        rightTrigger.OnGoalScored -= OnGoalScored;
-    }
-
     private void Start()
     {
-        InitializeGame();
+        Debug.Log($"Game type :{GameConfiguration.CurrentMode}");
+        InitializeSpawner();
     }
 
-    public void InitializeGame()
+    public void InitializeSpawner()
     {
         Debug.Log($"Game type :{GameConfiguration.CurrentMode}");
 
@@ -45,13 +33,29 @@ public class GameInitializer : MonoBehaviour
                 ((NetworkEntitySpawner)_spawner).SetNetworkManager(_networkManager);
                 break;
         }
-            
+
         _spawner.Init();
+    }
+
+    private void OnEnable()
+    {
+        gameSettingsView.OnRestart += OnRestartButtonClicked;
+        goalManager.GoalScored += OnGoalScored;
+    }
+
+    private void OnDisable()
+    {
+        gameSettingsView.OnRestart -= OnRestartButtonClicked;
+        goalManager.GoalScored -= OnGoalScored;
     }
 
     private void OnGoalScored(TeamSide scoringTeam)
     {
-        _spawner?.Respawn();
-        scoreBoard.UpdateScore(scoringTeam);
+        _spawner.Respawn(scoringTeam);
+    }
+
+    private void OnRestartButtonClicked()
+    {
+        _spawner.Respawn();
     }
 }

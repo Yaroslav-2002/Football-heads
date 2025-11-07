@@ -18,6 +18,7 @@ public class PlayerSpawnSettings
 
 public enum TeamSide
 {
+    None,
     Left,
     Right
 }

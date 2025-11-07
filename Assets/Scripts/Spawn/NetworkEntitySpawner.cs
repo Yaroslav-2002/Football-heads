@@ -64,12 +64,12 @@ public class NetworkEntitySpawner : EntitySpawnerBase
         }
     }
 
-    public override void Respawn()
+    public override void Respawn(TeamSide teamSide = TeamSide.None)
     {
         if (!IsServer())
             return;
 
-        base.Respawn();
+        base.Respawn(teamSide);
     }
 
     protected override GameObject Spawn(GameObject prefab, Transform spawnPoint)

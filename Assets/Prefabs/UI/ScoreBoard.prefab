@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 2387643575344768094}
   - component: {fileID: 975005783521592554}
   - component: {fileID: 1242895302367246620}
+  - component: {fileID: 4717039056981145352}
   m_Layer: 5
   m_Name: ScoreBoard
   m_TagString: Untagged
@@ -350,6 +351,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4717039056981145352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2804536972174495938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd42dd3855a4d540aec4b5391673dbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreBoard
+  scoreLeft: {fileID: 0}
+  scoreRight: {fileID: 0}
 --- !u!1 &3171476315238308281
 GameObject:
   m_ObjectHideFlags: 0

@@ -37,8 +37,6 @@ public class ViewManager : MonoBehaviour
             }
         }
 
-        DontDestroyOnLoad(gameObject);
-
         if (cameraPrefab)
         {
             InitCamera();
@@ -55,26 +53,6 @@ public class ViewManager : MonoBehaviour
         var canvas = GetComponent<Canvas>();
         canvas.worldCamera = _camera;
         canvas.planeDistance = _camera.farClipPlane / 2;
-
-        DontDestroyOnLoad(_camera);
-    }
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == SceneConstants.SCENE_GAME)
-        {
-            Show<GUIView>();
-        }
     }
 
     public static T GetView<T>() where T : View

@@ -380,7 +380,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa33fe4700938e419f098336dc8586b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartScreenController
-  viewManager: {fileID: 8008064462618775314, guid: 356bac5ff53cd104fac37e3032b42a83, type: 3}
   text: {fileID: 267983517}
 --- !u!114 &1312961981
 MonoBehaviour:

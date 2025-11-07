@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2fc04fdf79db10140aeee3438c3b4255
+guid: b4dc59ba9364d324cbd33beff150b0a4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9005890502163005390
-    second: 6a52a415-be89-442e-8452-50070f345f9d_0
+      213: -685337587310298942
+    second: "\u2014Pngtree\u2014football game scoreboard vector_14006802_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 6a52a415-be89-442e-8452-50070f345f9d_0
+      name: "\u2014Pngtree\u2014football game scoreboard vector_14006802_0"
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 1536
-        height: 1024
+        y: 541
+        width: 1200
+        height: 119
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2308284bd46a40380800000000000000
-      internalID: -9005890502163005390
+      spriteID: 2c8752d68113d76f0800000000000000
+      internalID: -685337587310298942
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      6a52a415-be89-442e-8452-50070f345f9d_0: -9005890502163005390
+      "\u2014Pngtree\u2014football game scoreboard vector_14006802_0": -685337587310298942
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
