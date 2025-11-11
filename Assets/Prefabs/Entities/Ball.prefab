@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 3074132713884091094}
   - component: {fileID: 5516297262714365273}
   - component: {fileID: 2727154497884587086}
-  - component: {fileID: 3538606479339316028}
-  - component: {fileID: 8064124942859162972}
-  - component: {fileID: 5788977992849082237}
   - component: {fileID: 7809543275529615141}
+  - component: {fileID: -3620839968350263768}
+  - component: {fileID: 6821903122950264780}
   m_Layer: 9
   m_Name: Ball
   m_TagString: Ball
@@ -101,7 +100,20 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.30219826
---- !u!114 &3538606479339316028
+--- !u!114 &7809543275529615141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929542034098923931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 337e3a7ce69c7ea49abd45054b7d9866, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  ballRespawnForce: 5
+--- !u!114 &-3620839968350263768
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,13 +142,13 @@ MonoBehaviour:
   UseUnreliableDeltas: 0
   SyncPositionX: 1
   SyncPositionY: 1
-  SyncPositionZ: 0
+  SyncPositionZ: 1
   SyncRotAngleX: 1
   SyncRotAngleY: 1
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -147,23 +159,7 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &8064124942859162972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 929542034098923931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d97e26d59fc556d45815d4829162397e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnerManager
-  networkSpawner: {fileID: 0}
-  localSpawner: {fileID: 0}
-  networkManager: {fileID: 0}
-  goalManager: {fileID: 0}
---- !u!114 &5788977992849082237
+--- !u!114 &6821903122950264780
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,20 +174,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkRigidbodyBaseExpanded: 0
   UseRigidBodyForMotion: 0
-  AutoUpdateKinematicState: 1
-  AutoSetKinematicOnDespawn: 1
---- !u!114 &7809543275529615141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 929542034098923931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337e3a7ce69c7ea49abd45054b7d9866, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
+  AutoUpdateKinematicState: 0
+  AutoSetKinematicOnDespawn: 0
 --- !u!1 &3761580388769799389
 GameObject:
   m_ObjectHideFlags: 0

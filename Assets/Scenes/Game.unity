@@ -138,6 +138,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   leftTrigger: {fileID: 1642873062}
   rightTrigger: {fileID: 1964263758}
+--- !u!1 &207383987
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207383989}
+  - component: {fileID: 207383988}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &207383988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207383987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a17ab69ff98c16419963d87a94eef5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameFlowController
+  gameObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  Timer: {fileID: 320786844}
+  gameSettingsView: {fileID: 297304829}
+--- !u!4 &207383989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207383987}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.05987, y: 0.987167, z: -10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &297304826
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -383,6 +433,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a2d96224ae01bb44b3be21b20dee90a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameSettingsView
+--- !u!114 &320786844 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 260755634033420458, guid: 0a4a56d6c03ad064cb61e1c9738015c4, type: 3}
+  m_PrefabInstance: {fileID: 1103492487}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70d510576d2af84dbd51cdb132ec84d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Timer
 --- !u!1 &369246974
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,6 +655,10 @@ PrefabInstance:
     - target: {fileID: 181662278181621797, guid: 0a4a56d6c03ad064cb61e1c9738015c4, type: 3}
       propertyPath: m_Name
       value: GUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 260755634033420458, guid: 0a4a56d6c03ad064cb61e1c9738015c4, type: 3}
+      propertyPath: _remainingTime
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3075354249886200484, guid: 0a4a56d6c03ad064cb61e1c9738015c4, type: 3}
       propertyPath: m_text
@@ -1326,6 +1391,7 @@ MonoBehaviour:
   localSpawner: {fileID: 7237878815248871435, guid: 1674e9ac80394c54f9a2593198708bbc, type: 3}
   networkManager: {fileID: 6701113159086996549, guid: e9deb9adf0956db4e9b9fd22ad31bc69, type: 3}
   goalManager: {fileID: 193908365}
+  gameSettingsView: {fileID: 297304829}
 --- !u!4 &1346063461
 Transform:
   m_ObjectHideFlags: 0
@@ -1491,6 +1557,7 @@ SceneRoots:
   - {fileID: 1281043282}
   - {fileID: 3000000002}
   - {fileID: 369246977}
+  - {fileID: 207383989}
   - {fileID: 2091154851}
   - {fileID: 1180948445}
   - {fileID: 829770190}

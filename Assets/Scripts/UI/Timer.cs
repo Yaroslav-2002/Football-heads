@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -5,10 +6,23 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _text;
     [SerializeField] private float _remainingTime;
+
+    public Action OnTimeGameTmeExpired;
     public float RemainingTime
     {
         get => _remainingTime;
         set => _remainingTime = value;
+    }
+
+    private bool _pause;
+    public void Pause()
+    {
+        _pause = true;
+    }
+
+    public void UnPause()
+    {
+        _pause = false;
     }
 
     private void Update()
@@ -16,10 +30,14 @@ public class Timer : MonoBehaviour
         if(_remainingTime <= 0)
         {
             _remainingTime = 0;
+            ViewManager.GetView<GameSettingsView>().Show();
+            OnTimeGameTmeExpired?.Invoke();
+            Time.timeScale = _remainingTime;
         }
         else
         {
-            _remainingTime -= Time.deltaTime;
+            if(!_pause) 
+                _remainingTime -= Time.deltaTime;
         }
         
         int minutes = Mathf.FloorToInt(_remainingTime / 60);

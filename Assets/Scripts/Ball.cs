@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour
     {
         get
         {
-            if (Rigidbody2D == null)
+            if (_rigidbody2D == null)
                 _rigidbody2D = GetComponent<Rigidbody2D>();
 
             return _rigidbody2D;
@@ -30,7 +30,6 @@ public class Ball : MonoBehaviour
 
         Rigidbody2D.linearVelocity = Vector2.zero;
         Rigidbody2D.angularVelocity = 0f;
-
     }
 
     private void ApplyRespawnForce(TeamSide scoringTeam)
