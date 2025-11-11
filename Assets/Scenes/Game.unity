@@ -167,10 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a17ab69ff98c16419963d87a94eef5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameFlowController
-  gameObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  gameobjects: {fileID: 11400000, guid: 07ce55ad5690cd14f97ccbd60be1e0a2, type: 2}
   Timer: {fileID: 320786844}
   gameSettingsView: {fileID: 297304829}
 --- !u!4 &207383989

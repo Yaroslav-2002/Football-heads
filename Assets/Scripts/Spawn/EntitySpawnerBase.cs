@@ -3,6 +3,8 @@ using UnityEngine;
 
 public abstract class EntitySpawnerBase : MonoBehaviour
 {
+    [SerializeField] protected GameobjectsRuntimeSet gameobjects;
+
     [Header("Player")] [SerializeField] protected List<PlayerSpawnSettings> playerSpawnSettings = new();
     [SerializeField] protected GameObject playerPrefab;
 
@@ -110,6 +112,7 @@ public abstract class EntitySpawnerBase : MonoBehaviour
     {
         if (instance != null)
         {
+            gameobjects.RemoveItem(instance);
             Destroy(instance);
         }
     }
@@ -122,7 +125,10 @@ public abstract class EntitySpawnerBase : MonoBehaviour
         Vector3 position = spawnPoint != null ? spawnPoint.position : Vector3.zero;
         Quaternion rotation = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
 
-        return Instantiate(prefab, position, rotation);
+        var gameobject = Instantiate(prefab, position, rotation);
+        gameobjects.AddItem(gameobject);
+
+        return gameobject;
     }
 
     protected static void ApplyTransform(Transform target, Transform source)
@@ -152,4 +158,9 @@ public abstract class EntitySpawnerBase : MonoBehaviour
     }
 
     protected abstract void InitializePlayer(GameObject playerInstance, PlayerSpawnSettings settings);
+
+    private void OnDisable()
+    {
+        gameobjects.Clear();
+    }
 }

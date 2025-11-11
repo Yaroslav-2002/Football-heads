@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2265374139708419059}
   - component: {fileID: 7237878815248871435}
   m_Layer: 0
-  m_Name: Spawner
+  m_Name: LocalSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c8431375f96ea2439c7698b804e3c96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntitySpawner
+  gameobjects: {fileID: 11400000, guid: 07ce55ad5690cd14f97ccbd60be1e0a2, type: 2}
   playerSpawnSettings:
   - identifier: 0
     spawnPoint: {fileID: 7422794014069639034, guid: 45b8d45f3cc6eb24d80be799ffac9683, type: 3}
@@ -56,4 +57,3 @@ MonoBehaviour:
   playerPrefab: {fileID: 6757439585877526867, guid: 1af08a5468993874ea7cb71e0d6acffa, type: 3}
   ballPrefab: {fileID: 929542034098923931, guid: 424d3420b7e26684d8e5098158a00966, type: 3}
   ballSpawnPoint: {fileID: 350163117964112090, guid: 5403cf820311cca4c8c95e28eb08b5e0, type: 3}
-  ballRespawnForce: 10
