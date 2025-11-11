@@ -7,11 +7,20 @@ public class Timer : MonoBehaviour
     [SerializeField] TextMeshProUGUI _text;
     [SerializeField] private float _remainingTime;
 
-    public Action OnTimeGameTmeExpired;
+    public Action OnGameTimeExpired;
+    private bool _hasExpired;
+
     public float RemainingTime
     {
         get => _remainingTime;
-        set => _remainingTime = value;
+        set
+        {
+            _remainingTime = value;
+            if (_remainingTime > 0f)
+            {
+                _hasExpired = false;
+            }
+        }
     }
 
     private bool _pause;
@@ -29,14 +38,17 @@ public class Timer : MonoBehaviour
     {
         if(_remainingTime <= 0)
         {
-            _remainingTime = 0;
-            ViewManager.GetView<GameSettingsView>().Show();
-            OnTimeGameTmeExpired?.Invoke();
-            Time.timeScale = _remainingTime;
+            if (!_hasExpired)
+            {
+                _remainingTime = 0;
+                _hasExpired = true;
+                ViewManager.GetView<GameSettingsView>().Show();
+                OnGameTimeExpired?.Invoke();
+            }
         }
         else
         {
-            if(!_pause) 
+            if(!_pause)
                 _remainingTime -= Time.deltaTime;
         }
         

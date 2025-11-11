@@ -8,14 +8,14 @@ public class GameFlowController : MonoBehaviour
 
     private void OnEnable()
     {
-        Timer.OnTimeGameTmeExpired += Pause;
+        Timer.OnGameTimeExpired += Pause;
         gameSettingsView.OnShowed += Pause;
         gameSettingsView.OnClosed += UnPause;
     }
 
     private void OnDisable()
     {
-        Timer.OnTimeGameTmeExpired -= Pause;
+        Timer.OnGameTimeExpired -= Pause;
         gameSettingsView.OnShowed -= Pause;
         gameSettingsView.OnClosed -= UnPause;
     }
@@ -24,9 +24,15 @@ public class GameFlowController : MonoBehaviour
     {
         foreach (var gameObject in gameobjects.items)
         {
-            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            if (gameObject.TryGetComponent<Rigidbody2D>(out var body))
+            {
+                body.bodyType = RigidbodyType2D.Kinematic;
+                body.velocity = Vector2.zero;
+                body.angularVelocity = 0f;
+            }
         }
 
+        Time.timeScale = 0f;
         Timer.Pause();
     }
 
@@ -35,9 +41,13 @@ public class GameFlowController : MonoBehaviour
         
         foreach (var gameObject in gameobjects.items)
         {
-            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            if (gameObject.TryGetComponent<Rigidbody2D>(out var body))
+            {
+                body.bodyType = RigidbodyType2D.Dynamic;
+            }
         }
 
+        Time.timeScale = 1f;
         Timer.UnPause();
     }
 }
