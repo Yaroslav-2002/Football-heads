@@ -42,7 +42,6 @@ public class Timer : MonoBehaviour
             {
                 _remainingTime = 0;
                 _hasExpired = true;
-                ViewManager.GetView<GameSettingsView>().Show();
                 OnGameTimeExpired?.Invoke();
             }
         }

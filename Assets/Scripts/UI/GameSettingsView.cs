@@ -8,6 +8,7 @@ public class GameSettingsView : View
 {
     [SerializeField] private Button restartGameButton;
     [SerializeField] private Button exitToMenuButton;
+    [SerializeField] private Button resumeButton;
     private AsyncOperation _load;
 
     public Action OnRestart;
@@ -22,6 +23,11 @@ public class GameSettingsView : View
         if (exitToMenuButton != null)
         {
             exitToMenuButton.onClick.AddListener(() => StartCoroutine(OnExitButtonClicked()));
+        }
+
+        if (exitToMenuButton != null)
+        {
+            resumeButton.onClick.AddListener(() => OnResumeButtonClicked());
         }
     }
 
@@ -38,6 +44,11 @@ public class GameSettingsView : View
     private void OnRestartButtonClicked()
     {
         OnRestart.Invoke();
+        ViewManager.Show<GUIView>();
+    }
+
+    private void OnResumeButtonClicked()
+    {
         ViewManager.Show<GUIView>();
     }
 }

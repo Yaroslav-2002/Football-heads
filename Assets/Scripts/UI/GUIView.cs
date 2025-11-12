@@ -8,11 +8,6 @@ public class GUIView : View
 
     public ScoreBoard ScoreBoard { get { return scoreBoard; } }
 
-    public override void Show()
-    {
-        base.Show();
-    }
-
     public override void Init()
     {
         if (gameSettingsButton != null)

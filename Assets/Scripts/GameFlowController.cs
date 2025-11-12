@@ -8,16 +8,21 @@ public class GameFlowController : MonoBehaviour
 
     private void OnEnable()
     {
-        Timer.OnGameTimeExpired += Pause;
+        Timer.OnGameTimeExpired += EndGame;
         gameSettingsView.OnShowed += Pause;
         gameSettingsView.OnClosed += UnPause;
     }
 
     private void OnDisable()
     {
-        Timer.OnGameTimeExpired -= Pause;
+        Timer.OnGameTimeExpired -= EndGame;
         gameSettingsView.OnShowed -= Pause;
         gameSettingsView.OnClosed -= UnPause;
+    }
+
+    private void EndGame()
+    {
+        ViewManager.GetView<GameSettingsView>().Show();
     }
 
     private void Pause()
@@ -38,7 +43,6 @@ public class GameFlowController : MonoBehaviour
 
     private void UnPause()
     {
-        
         foreach (var gameObject in gameobjects.items)
         {
             if (gameObject.TryGetComponent<Rigidbody2D>(out var body))
