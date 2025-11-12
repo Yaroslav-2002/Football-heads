@@ -194,6 +194,7 @@ GameObject:
   - component: {fileID: 6988100569917134835}
   - component: {fileID: 3455683054631597423}
   - component: {fileID: 2308869895780735378}
+  - component: {fileID: 3110282511116407435}
   m_Layer: 5
   m_Name: GUI
   m_TagString: Untagged
@@ -273,10 +274,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6fda76185698aa4285ae38b395d5a26, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: '::'
   gameSettingsButton: {fileID: 547081988406279882}
   scoreBoard: {fileID: 4527946579499102306}
+--- !u!114 &3110282511116407435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181662278181621797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b803d1a3aab4b8c82c9c2c5aa1f97e5, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  gameobjectsRuntimeSet: {fileID: 11400000, guid: a74d7a311e867a244821d4fed4f20635, type: 2}
+  controlScheme: 0
+  jumpButton: {fileID: 5662106378510201445}
+  kickButton: {fileID: 4070118637895152231}
+  moveLeftButton: {fileID: 4708745623047620943}
+  moveRightButton: {fileID: 5630241745987612391}
 --- !u!1 &618030546221104728
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,6 +372,7 @@ GameObject:
   - component: {fileID: 4811911425296114955}
   - component: {fileID: 7913882724798343605}
   - component: {fileID: 7328488227016615926}
+  - component: {fileID: 5662106378510201445}
   m_Layer: 5
   m_Name: Jump
   m_TagString: Untagged
@@ -428,7 +448,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
@@ -462,6 +482,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5662106378510201445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940310111192006510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5be6e553b5435b8dc132adf91245a0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &1326408354285129875
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,6 +506,7 @@ GameObject:
   - component: {fileID: 3987758111720050862}
   - component: {fileID: 8160586849395827791}
   - component: {fileID: 3587792937223800029}
+  - component: {fileID: 4070118637895152231}
   m_Layer: 5
   m_Name: Kick
   m_TagString: Untagged
@@ -549,7 +582,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
@@ -583,6 +616,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4070118637895152231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326408354285129875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5be6e553b5435b8dc132adf91245a0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &1468944853081732183
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,6 +640,7 @@ GameObject:
   - component: {fileID: 4838718494221279594}
   - component: {fileID: 489360619599929072}
   - component: {fileID: 9053962941951933180}
+  - component: {fileID: 5630241745987612391}
   m_Layer: 5
   m_Name: Right
   m_TagString: Untagged
@@ -670,7 +716,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
@@ -704,6 +750,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5630241745987612391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1468944853081732183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5be6e553b5435b8dc132adf91245a0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &1497017938455528398
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,6 +1046,7 @@ GameObject:
   - component: {fileID: 2526343336071484356}
   - component: {fileID: 2554941085259862886}
   - component: {fileID: 4169973499974808898}
+  - component: {fileID: 4708745623047620943}
   m_Layer: 5
   m_Name: Left
   m_TagString: Untagged
@@ -1063,7 +1122,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
     m_Mode: 3
@@ -1097,6 +1156,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4708745623047620943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3953261787175617728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5be6e553b5435b8dc132adf91245a0, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &3960745607703284501
 GameObject:
   m_ObjectHideFlags: 0
