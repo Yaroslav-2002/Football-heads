@@ -28,20 +28,29 @@ public class NetworkBootstrapper : MonoBehaviour
             return;
         }
 
-        var transport = networkManager.NetworkConfig?.NetworkTransport as UnityTransport;
-
         if (GameConfiguration.ShouldStartHost)
         {
-            ApplyHostTransportSettings(transport);
+            var transport = networkManager.NetworkConfig?.NetworkTransport as UnityTransport;
+            string advertisedAddress = null;
+            ushort advertisedPort = 0;
+
+            if (!string.IsNullOrEmpty(GameConfiguration.HostJoinCode) &&
+                JoinCodeUtility.TryParseJoinCode(GameConfiguration.HostJoinCode, out var shareAddress, out var sharePort))
+            {
+                advertisedAddress = shareAddress;
+                advertisedPort = sharePort;
+            }
+
+            ApplyHostTransportSettings(transport, advertisedAddress);
             if (!networkManager.StartHost())
             {
                 Debug.LogError("Failed to start host session.", this);
             }
             else if (!string.IsNullOrEmpty(GameConfiguration.HostJoinCode))
             {
-                if (JoinCodeUtility.TryParseJoinCode(GameConfiguration.HostJoinCode, out var shareAddress, out var sharePort))
+                if (!string.IsNullOrEmpty(advertisedAddress))
                 {
-                    Debug.Log($"Hosting session at {shareAddress}:{sharePort}. Join code: {GameConfiguration.HostJoinCode}");
+                    Debug.Log($"Hosting session at {advertisedAddress}:{advertisedPort}. Join code: {GameConfiguration.HostJoinCode}");
                 }
                 else
                 {
@@ -53,6 +62,7 @@ public class NetworkBootstrapper : MonoBehaviour
         }
         else if (GameConfiguration.ShouldStartClient)
         {
+            var transport = networkManager.NetworkConfig?.NetworkTransport as UnityTransport;
             if (transport == null)
             {
                 Debug.LogError("Unable to configure client transport.", this);
@@ -95,14 +105,30 @@ public class NetworkBootstrapper : MonoBehaviour
         }
     }
 
-    private void ApplyHostTransportSettings(UnityTransport transport)
+    private void ApplyHostTransportSettings(UnityTransport transport, string advertisedAddress)
     {
         if (transport == null)
         {
             return;
         }
 
-        transport.SetConnectionData(GameConfiguration.HostAddress, GameConfiguration.HostPort, GameConfiguration.HostAddress);
+        string listenAddress = string.IsNullOrWhiteSpace(GameConfiguration.HostAddress)
+            ? "0.0.0.0"
+            : GameConfiguration.HostAddress;
+
+        string connectionAddress = advertisedAddress;
+
+        if (string.IsNullOrWhiteSpace(connectionAddress))
+        {
+            connectionAddress = listenAddress;
+        }
+
+        if (string.IsNullOrWhiteSpace(connectionAddress) || connectionAddress == "0.0.0.0")
+        {
+            connectionAddress = "127.0.0.1";
+        }
+
+        transport.SetConnectionData(listenAddress, GameConfiguration.HostPort, connectionAddress);
     }
 }
 
