@@ -77,6 +77,24 @@ public class NetworkBootstrapper : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (networkManager == null)
+        {
+            return;
+        }
+
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        if (networkManager.IsListening || networkManager.IsClient || networkManager.IsServer)
+        {
+            networkManager.Shutdown();
+        }
+    }
+
     private void ApplyHostTransportSettings(UnityTransport transport)
     {
         if (transport == null)
