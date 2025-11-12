@@ -20,6 +20,8 @@ public class PlayerInput : MonoBehaviour
     private InputAction _jumpAction;
     private InputAction _kickAction;
     private bool _isInitialized;
+    private bool _uiMoveLeftHeld;
+    private bool _uiMoveRightHeld;
 
     private void Awake()
     {
@@ -91,7 +93,9 @@ public class PlayerInput : MonoBehaviour
         }
 
         Vector2 moveInput = _moveAction.ReadValue<Vector2>();
-        _controllable.Move(moveInput.x);
+        float uiMoveInput = GetUIMoveInput();
+        float horizontalInput = Mathf.Approximately(uiMoveInput, 0f) ? moveInput.x : uiMoveInput;
+        _controllable.Move(horizontalInput);
     }
 
     private void EnableActions()
@@ -146,5 +150,74 @@ public class PlayerInput : MonoBehaviour
     private void OnKickCanceled(InputAction.CallbackContext context)
     {
         _controllable.ReleaseKick();
+    }
+
+    public ControlScheme CurrentScheme => _controlScheme;
+
+    public void StartMoveLeftFromUI()
+    {
+        _uiMoveLeftHeld = true;
+    }
+
+    public void StopMoveLeftFromUI()
+    {
+        _uiMoveLeftHeld = false;
+    }
+
+    public void StartMoveRightFromUI()
+    {
+        _uiMoveRightHeld = true;
+    }
+
+    public void StopMoveRightFromUI()
+    {
+        _uiMoveRightHeld = false;
+    }
+
+    public void JumpFromUI()
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
+        _controllable.Jump();
+    }
+
+    public void StartKickFromUI()
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
+        _controllable.StartKick();
+    }
+
+    public void StopKickFromUI()
+    {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
+        _controllable.ReleaseKick();
+    }
+
+    private float GetUIMoveInput()
+    {
+        float input = 0f;
+
+        if (_uiMoveLeftHeld)
+        {
+            input -= 1f;
+        }
+
+        if (_uiMoveRightHeld)
+        {
+            input += 1f;
+        }
+
+        return Mathf.Clamp(input, -1f, 1f);
     }
 }
