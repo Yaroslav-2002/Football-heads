@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fe736f02a97f3c43a3925e8df17a5b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkEntitySpawner
-  gameobjects: {fileID: 11400000, guid: 07ce55ad5690cd14f97ccbd60be1e0a2, type: 2}
+  gameobjects: {fileID: 11400000, guid: a74d7a311e867a244821d4fed4f20635, type: 2}
   playerSpawnSettings:
   - identifier: 0
     spawnPoint: {fileID: 7422794014069639034, guid: 45b8d45f3cc6eb24d80be799ffac9683, type: 3}

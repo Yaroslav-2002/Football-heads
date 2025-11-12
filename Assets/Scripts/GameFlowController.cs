@@ -27,7 +27,7 @@ public class GameFlowController : MonoBehaviour
             if (gameObject.TryGetComponent<Rigidbody2D>(out var body))
             {
                 body.bodyType = RigidbodyType2D.Kinematic;
-                body.velocity = Vector2.zero;
+                body.linearVelocity = Vector2.zero;
                 body.angularVelocity = 0f;
             }
         }

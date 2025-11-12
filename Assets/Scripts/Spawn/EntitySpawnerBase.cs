@@ -125,7 +125,7 @@ public abstract class EntitySpawnerBase : MonoBehaviour
         Vector3 position = spawnPoint != null ? spawnPoint.position : Vector3.zero;
         Quaternion rotation = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
 
-        var gameobject = Instantiate(prefab, position, rotation);
+        GameObject gameobject = Instantiate(prefab, position, rotation);
         gameobjects.AddItem(gameobject);
 
         return gameobject;
