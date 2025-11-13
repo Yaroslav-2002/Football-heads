@@ -5,7 +5,6 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private NetworkEntitySpawner networkSpawner;
     [SerializeField] private EntitySpawner localSpawner;
-    [SerializeField] private NetworkManager networkManager;
     [SerializeField] private GoalManager goalManager;
     [SerializeField] private GameSettingsView gameSettingsView;
 
@@ -28,7 +27,6 @@ public class SpawnManager : MonoBehaviour
                 _spawner = Instantiate(localSpawner);
                 break;
             case GameMode.Multiplayer:
-                _networkManager = Instantiate(networkManager);
                 _spawner = Instantiate(networkSpawner);
                 ((NetworkEntitySpawner)_spawner).SetNetworkManager(_networkManager);
                 break;
