@@ -14,10 +14,10 @@ public class PlayerInputUIController : MonoBehaviour
 
     private void Awake()
     {
-#if UNITY_STANDALONE_WIN
-        gameObject.SetActive(true);
-#else
+#if UNITY_STANDALONE || UNITY_EDITOR
         gameObject.SetActive(false);
+#else
+        gameObject.SetActive(true);
 #endif
     }
 
