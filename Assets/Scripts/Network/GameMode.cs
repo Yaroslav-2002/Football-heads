@@ -1,5 +1,6 @@
 public enum GameMode
 {
     Singleplayer,
-    Multiplayer
+    Host,
+    Cient
 }

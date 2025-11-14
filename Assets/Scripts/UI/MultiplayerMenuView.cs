@@ -13,6 +13,7 @@ public class MultiplayerMenuView : View
     [SerializeField] private TMP_InputField joinCodeInputField;
     [SerializeField] private TextMeshProUGUI statusLabel;
     [SerializeField] private TextMeshProUGUI hostCodeLabel;
+    [SerializeField] GameConfiguration GameConfiguration;
 
     private bool isProcessing;
 
@@ -40,7 +41,6 @@ public class MultiplayerMenuView : View
     public override void Show()
     {
         base.Show();
-        isProcessing = false;
 
         if (hostCodeLabel != null)
         {
@@ -50,56 +50,13 @@ public class MultiplayerMenuView : View
 
     private void OnHostClicked()
     {
-        if (isProcessing)
-        {
-            return;
-        }
-
-        isProcessing = true;
-
-        if (!JoinCodeUtility.TryGetLocalIPv4(out var localAddress) || string.IsNullOrEmpty(localAddress))
-        {
-            localAddress = "127.0.0.1";
-        }
-
-        var joinCode = JoinCodeUtility.GenerateJoinCode(localAddress, GameConfiguration.HostPort);
-        GameConfiguration.ConfigureHost("0.0.0.0", GameConfiguration.HostPort, joinCode);
-
-        if (hostCodeLabel != null)
-        {
-            hostCodeLabel.text = $"Share this code: {joinCode}";
-        }
-
-        UpdateStatus("Starting host...");
+        
         SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }
 
     private void OnJoinClicked()
     {
-        if (isProcessing)
-        {
-            return;
-        }
-
-        var joinCodeText = joinCodeInputField != null ? joinCodeInputField.text : string.Empty;
-        var joinCode = string.IsNullOrWhiteSpace(joinCodeText)
-            ? string.Empty
-            : joinCodeText.Trim().ToUpperInvariant();
-
-        if (joinCodeInputField != null && joinCodeInputField.text != joinCode)
-        {
-            joinCodeInputField.text = joinCode;
-        }
-
-        if (!JoinCodeUtility.TryParseJoinCode(joinCode, out var address, out var port))
-        {
-            UpdateStatus("Invalid join code. Use letters A-Z and numbers 2-9.");
-            return;
-        }
-
-        isProcessing = true;
-        GameConfiguration.ConfigureClient(joinCode);
-        UpdateStatus($"Joining {address}:{port}...");
+        
         SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }
 

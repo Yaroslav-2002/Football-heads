@@ -8,10 +8,11 @@ public class MainMenuView : View
     [SerializeField] Button settingsButton;
     [SerializeField] Button startButton;
     [SerializeField] Button multiplayerButton;
+    [SerializeField] GameConfiguration GameConfiguration;
 
     public override void Init()
     {
-        if (exitButton != null)
+        if (exitButton != null);
         {
             exitButton.onClick.AddListener(OnExitButtonClick);
         }
@@ -34,7 +35,7 @@ public class MainMenuView : View
 
     private void OnStartButtonClicked()
     {
-        GameConfiguration.CurrentMode = GameMode.Singleplayer;
+        GameConfiguration.GameMode = GameMode.Singleplayer;
         SceneManager.LoadSceneAsync(SceneConstants.SCENE_GAME);
     }
 

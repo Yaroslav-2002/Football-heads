@@ -1,12 +1,13 @@
 using System;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _text;
     [SerializeField] private float _remainingTime;
-
+     
     public Action OnGameTimeExpired;
     private bool _hasExpired;
 

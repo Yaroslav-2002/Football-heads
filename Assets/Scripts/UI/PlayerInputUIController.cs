@@ -12,6 +12,15 @@ public class PlayerInputUIController : MonoBehaviour
 
     private PlayerInput _playerInput;
 
+    private void Awake()
+    {
+#if UNITY_STANDALONE_WIN
+        gameObject.SetActive(true);
+#else
+        gameObject.SetActive(false);
+#endif
+    }
+
     private void OnEnable()
     {
         Subscribe();

@@ -7,21 +7,22 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private EntitySpawner localSpawner;
     [SerializeField] private GoalManager goalManager;
     [SerializeField] private GameSettingsView gameSettingsView;
+    [SerializeField] GameConfiguration GameConfiguration;
 
     private EntitySpawnerBase _spawner;
     private NetworkManager _networkManager;
 
     private void Start()
     {
-        Debug.Log($"Game type :{GameConfiguration.CurrentMode}");
+        Debug.Log($"Game type :{GameConfiguration.GameMode}");
         InitializeSpawner();
     }
 
     public void InitializeSpawner()
     {
-        Debug.Log($"Game type :{GameConfiguration.CurrentMode}");
+        Debug.Log($"Game type :{GameConfiguration.GameMode}");
 
-        switch (GameConfiguration.CurrentMode)
+        switch (GameConfiguration.GameMode)
         {
             case GameMode.Singleplayer:
                 _spawner = Instantiate(localSpawner);
