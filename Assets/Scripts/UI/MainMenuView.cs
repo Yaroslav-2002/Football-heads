@@ -12,7 +12,7 @@ public class MainMenuView : View
 
     public override void Init()
     {
-        if (exitButton != null);
+        if (exitButton != null)
         {
             exitButton.onClick.AddListener(OnExitButtonClick);
         }
