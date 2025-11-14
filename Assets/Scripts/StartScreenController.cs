@@ -11,15 +11,17 @@ public class StartScreenController : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
     }
 
     private IEnumerator Start()
     {
         _load = SceneManager.LoadSceneAsync(SceneConstants.SCENE_MENU, LoadSceneMode.Single);
 
-        if (!_load.isDone)
+        while (!_load.isDone)
+        {
             yield return null;
+        }
 
         Destroy(gameObject);
     }
